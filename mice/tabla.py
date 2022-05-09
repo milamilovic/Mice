@@ -69,3 +69,33 @@ class Tabla(object):
         return self._deca
     def broj_dece(self):
         return len(self._deca)
+
+    def validni_potezi_faza2(self, boja):   #vraca listu objekata tipa tabla koji su u stvari sva deca ove table???
+        potezi = []                         #nzm svakako vraca listu tabli
+        pozicija=0
+        for i in len(self._izgled):
+            for j in len(self._izgled[i]):
+                pozicija+=1
+                if j == 0:
+                    prethodno = 7
+                elif j == 7:
+                    sledece = 0
+                if self._izgled[i][j] == boja:
+                    if self._izgled[i][prethodno] == "x":
+                        lista = main.nova_lista(self._izgled, pozicija, i*8+prethodno)
+                        potezi.append(Tabla(lista))
+                    if self._izgled[i][sledece] == "x":
+                        lista = main.nova_lista(self._izgled, pozicija, i*8+sledece)
+                        potezi.append(Tabla(lista))
+                    if j in [1, 3, 5, 7] and i in [0, 2]:
+                        if self._izgled[1][j] == "x":
+                            lista = main.nova_lista(self._izgled, pozicija, j+9)
+                            potezi.append(Tabla(lista))
+                    elif j in [1, 3, 5, 7] and i==1:
+                        if self.izgled[0][j] == "x":
+                            lista = main.nova_lista(self._izgled, pozicija, 2)
+                            potezi.append(Tabla(lista))
+                        elif self.izgled[2][j] == "x":
+                            lista = main.nova_lista(self._izgled, pozicija, 18)
+                            potezi.append(Tabla(lista))
+        return potezi

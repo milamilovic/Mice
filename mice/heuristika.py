@@ -1,3 +1,5 @@
+import main
+
 def heuristika(tabla, faza, boja):
     if faza == 1:
         pass
@@ -7,12 +9,20 @@ def heuristika(tabla, faza, boja):
         pass
         #da li ovo uopšte treba da postoji???
 
-def novi_mlin(tabla, boja):
-    pass
-    #k = tabla.broj_mlinova() - tabla._roditelj.broj_mlinova()
-    # if k >= 1:
-    #   novi_mlin += k
-    #mozda da se svostruko ili trostruko poena dobije za 2 milina odjednom
+def novi_mlin(tabla, boja):     #vraca brojcanu vrednost koja oznacava razliku nasih i protivickih novih 
+    new_mlin = 0                #mlinova je napravljeno u ovom potezu
+    k = tabla.broj_mlinova(tabla, boja) - tabla._roditelj.broj_mlinova(tabla, boja)
+    if k >= 1:
+        new_mlin += k
+    new_mlin2 = 0
+    if boja == "■":
+        boja2 = "▢"
+    else:
+        boja2 = "■"
+    k = tabla.broj_mlinova(tabla, boja2) - tabla._roditelj.broj_mlinova(tabla, boja2)
+    if k >= 1:
+        new_mlin2 += k
+    return new_mlin - new_mlin2
 
 def broj_mlinova(tabla, boja):          #vraca broj nasih mlinova minus broj mlinova suparnika
     broj_mlinova = 0
@@ -113,11 +123,14 @@ def dupli_mlin(tabla, boja):
     pass
     #dva mlina paralelno ili cosak mada to je losije
 
-def pobednicka_konfiguracija(tabla, boja):
-    pass
-    #if broj_mogucih_poteza(tabla, boja2) == 0 or broj_piona(tabla, boja2) == 2:
-    #   return 1000
-    #else:
-    #   return 0
+def pobednicka_konfiguracija(tabla, boja):      #vraca 1000 za pobednicku konfig, a nula ako nije
+    if boja == "■":
+        boja2 = "▢"
+    else:
+        boja2 = "■"
+    if len(tabla.validni_potezi_faza2(boja2)) == 0 or broj_piona(tabla, boja2) == 2:
+        return 1000
+    else:
+        return 0
 
 

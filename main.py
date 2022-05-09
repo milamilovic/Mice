@@ -8,6 +8,18 @@ def Pravila():
     print("Dobrodošli u igru mice!")
     print("")
 
+def nova_lista(stara_lista, koja_pozicija, gde):
+    lista=[[], [], []]
+    for i in len(stara_lista):
+        for j in len(stara_lista[i]):
+            lista[i].append(stara_lista[i][j])
+    kojai = koja_pozicija//8
+    kojaj = koja_pozicija%8
+    gdei = gde//8
+    gdej = gde%8
+    lista[kojai][kojaj], lista[gdei][gdej] = lista[gdei][gdej], lista[kojai][kojaj]
+    return lista
+
 if __name__ == "__main__":
     Pravila()
     boja="55555"
@@ -21,8 +33,8 @@ if __name__ == "__main__":
     else:
         boja, boja2 = "■", "▢"
     dubina = 0
-    while dubina not in ["3", "4", "5", "6", "7", "8"]:
+    while dubina not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
         if dubina != 0:
             print("Niste uneli validnu opciju! Pokušajte ponovo!")
-        dubina=input("Unesite broj izmedju 3 i 8 koji označava do koje dubine želite da se ispituje dalji dok igre(stablo igre): ")
+        dubina=input("Unesite broj izmedju 1 i 8 koji označava do koje dubine želite da se ispituje dalji dok igre(stablo igre): ")
     dubina = int(dubina)
