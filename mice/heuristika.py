@@ -145,9 +145,30 @@ def broj_dvojki(tabla, boja):           #vraca broj dvojki koje postoje na tabli
                         broj_dvojki += 1
     return broj_dvojki
 
+<<<<<<< HEAD
 def broj_trojki(tabla, boja):           #vraca broj trojki koje postoje na tabli za jednu boju, važi za prvu fazu
     dva = broj_dvojki(tabla, boja)
     return ( dva * (dva - 1) ) / 2
+=======
+def broj_trojki(tabla, boja):           #vraca broj trojki koje postoje na tabli za jednu boju
+    #slovo L bez krajeva, dva paralelna, dva nepovezana skroz
+    pozicija=0
+    broj_trojki = 0
+    for i in range(len(tabla._izgled)):
+        for j in range(0, len(tabla._izgled[i]), 2):
+            if pozicija != 0:    
+                pozicija+=2
+            sledece = j + 1
+            prethodno = j - 1
+            #proveravati red po red mozda
+            if j == 0:
+                prethodno = 7
+            if tabla._izgled[i][j] == boja:
+                pass
+            elif tabla._izgled[i][j] == "x":
+                pass
+    return broj_trojki
+>>>>>>> e293acb0f54813040c24277b5a8bbee4591139e7
 
 def nova_prilika_za_mlin(tabla, boja):                              #funkcija vraca broj novih prilika za mlin minus za protivnika
     if boja == "■":
@@ -159,6 +180,7 @@ def nova_prilika_za_mlin(tabla, boja):                              #funkcija vr
     return k - l
     
 def dupli_mlin(tabla, boja):
+<<<<<<< HEAD
     if boja == "■":
         boja2 = "▢"
     else:
@@ -196,6 +218,10 @@ def dupli_mlin(tabla, boja):
         elif tabla[2][j] == "x" and tabla[2][j-1]==tabla[2][sledece]==tabla[1][j]==tabla[0][j]==boja2:
             broj_duplih -= 1
             
+=======
+    pass
+    #slovo L bez coska, plus bez preseka, T bez preseka sto je plus bez preseka samo drugi sloj
+>>>>>>> e293acb0f54813040c24277b5a8bbee4591139e7
 
 def pobednicka_konfiguracija(tabla, boja):      #vraca 1000 za pobednicku konfig, a nula ako nije
     if boja == "■":
