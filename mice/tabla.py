@@ -1,26 +1,22 @@
-import figura
 import ispisTable
 import heuristika
 import main
 
 class Tabla(object):
-    def __init__(self, lista):
+    def __init__(self, lista, faza):
         self._izgled = lista
         self._roditelj = None
         self._deca = []
-        self._faza = 1
+        self._faza = faza
         self._boja = main._boja
+        self._heuristickavrednost = heuristika.heuristika(self._izgled, self._faza, main.boja)
     def __str__(self):
         ispisTable.ispisTable(self._izgled)
         return ""
     def __lt__(self, other):
-        vrednost1 = heuristika.heuristika(self._izgled, self._faza, main.boja)
-        vrednost2 = heuristika.heuristika(other._izgled, other._faza, main.boja2)
-        return vrednost1 < vrednost2
+        return self._heuristickavrednost < other._heuristickavrednost
     def __eq__(self, other):
-        vrednost1 = heuristika.heuristika(self._izgled, self._faza, main.boja)
-        vrednost2 = heuristika.heuristika(other._izgled, other._faza, main.boja2)
-        return vrednost1 == vrednost2
+        return self._heuristickavrednost == other._heuristickavrednost
 
     @property
     def izgled(self):
@@ -46,6 +42,12 @@ class Tabla(object):
     @faza.setter
     def faza(self, value):
         self._faza = value
+    @property
+    def heuristickavrednost(self):
+        return self._heuristickavrednost
+    @heuristickavrednost.setter
+    def heuristickavrednost(self, value):
+        self._heuristickavrednost = value
 
     def _is_root_(self):
         return self._roditelj == None
@@ -108,3 +110,25 @@ class Tabla(object):
             return potezi
         elif potreba == "potezi_koordinate":
             return koordinate
+
+    def da_li_je_kraj_igre(self):
+        if self._boja == "■":
+            boja2 = "▢"
+        else:
+            boja2 = "■"
+        if len(self.validni_potezi_faza2(boja2, "broj")) == 0 or heuristika.broj_piona(self._izgled, boja2) == 2:
+            return "pobeda"
+        elif len(self.validni_potezi_faza2(self._boja, "broj")) == 0 or heuristika.broj_piona(self._izgled, self._boja) == 2:
+            return "poraz"
+        else:
+            return ""
+
+    def da_li_je_potez_validan_faza2(self, koji, gde, faza="2"):
+        if self._boja == "■":
+            boja2 = "▢"
+        else:
+            boja2 = "■"
+        if main.nova_lista(self._izgled, koji, gde) in self.validni_potezi_faza2(boja2, "broj"):
+            return True
+        else:
+            return False

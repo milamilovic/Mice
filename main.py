@@ -41,6 +41,8 @@ def nova_lista(stara_lista, koja_pozicija, gde):
 
 if __name__ == "__main__":
     Pravila()
+    i = mice.igra.Igra()
+    i.igraj()
     # boja="55555"
     # while boja not in ["1", "2"]:
     #     if boja != "55555":
