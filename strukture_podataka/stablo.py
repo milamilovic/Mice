@@ -53,8 +53,8 @@ class CvorStabla(object):
 
 
 class Stablo(object):
-    def __init__(self):
-        self._root = None
+    def __init__(self, koren=None):
+        self._root = koren
 
     def preorder(self, cvor):
         if self._is_empty_ != True:

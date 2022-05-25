@@ -8,7 +8,7 @@ def heuristika(tabla, faza, boja, gde=0):
     if faza == 1:
         stanje_table =  novi_mlin(tabla, boja)*20 + broj_mlinova(tabla, boja)*15 + broj_blokiranih_figura(tabla, boja)*10 + broj_piona(tabla, boja)*5 + (broj_dvojki(tabla, boja)-broj_dvojki(tabla, boja2))*25 + (broj_trojki(tabla, boja)-broj_trojki(tabla, boja2))*30
         vrednost_pozicije = pozicija(gde)
-        return stanje_table + vrednost_pozicije
+        return stanje_table + vrednost_pozicije*2
     else:
         return novi_mlin(tabla, boja)*30 + broj_mlinova(tabla, boja)*15 + broj_blokiranih_figura(tabla, boja)*15 + broj_piona(tabla, boja)*5 + nova_prilika_za_mlin(tabla, boja)*25 + dupli_mlin(tabla, boja)*40 + pobednicka_konfiguracija(tabla, boja)
 
@@ -204,12 +204,14 @@ def dupli_mlin(tabla, boja):        #vraca razliku nasih i protivnikovih mlinova
             broj_duplih -= 1
     return broj_duplih
 
-def pobednicka_konfiguracija(tabla, boja):      #vraca 1000 za pobednicku konfig, a nula ako nije
+def pobednicka_konfiguracija(tabla, boja):      #vraca 1000 za pobednicku konfig, a nula ako nije, -1000 ako je gubitak
     if boja == "■":
         boja2 = "▢"
     else:
         boja2 = "■"
     if len(tabla.validni_potezi_faza2(boja2, "broj")) == 0 or broj_piona(tabla, boja2) == 2:
         return 1000
+    elif len(tabla.validni_potezi_faza2(boja, "broj")) == 0 or broj_piona(tabla, boja) == 2:
+        return -1000
     else:
         return 0
