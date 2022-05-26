@@ -106,36 +106,36 @@ class Tabla(object):
                 if self._izgled[i][j] == boja:
                     if self._izgled[i][prethodno] == "x":
                         if potreba == "broj":
-                            lista = main.nova_lista(self._izgled, pozicija, i*8+prethodno)  #pozicije idu od 1 do 24
+                            lista = nova_lista(self._izgled, pozicija, i*8+prethodno)  #pozicije idu od 1 do 24
                             potezi.append(Tabla(lista))
                         elif potreba == "potezi_koordinate":
-                            koordinate.append(main.pozicija_u_koordinatu(pozicija, i*8+prethodno))
+                            koordinate.append(pozicija_u_koordinatu(pozicija, i*8+prethodno))
                     if self._izgled[i][sledece] == "x":
                         if potreba == "broj":
-                            lista = main.nova_lista(self._izgled, pozicija, i*8+sledece)
+                            lista = nova_lista(self._izgled, pozicija, i*8+sledece)
                             potezi.append(Tabla(lista))
                         elif potreba == "potezi_koordinate":
-                            koordinate.append(main.pozicija_u_koordinatu(pozicija, i*8+sledece))
+                            koordinate.append(pozicija_u_koordinatu(pozicija, i*8+sledece))
                     if j in [1, 3, 5, 7] and i in [0, 2]:
                         if self._izgled[1][j] == "x":
                             if potreba == "broj":
-                                lista = main.nova_lista(self._izgled, pozicija, j+9)
+                                lista = nova_lista(self._izgled, pozicija, j+9)
                                 potezi.append(Tabla(lista))
                             elif potreba == "potezi_koordinate":
-                                koordinate.append(main.pozicija_u_koordinatu(pozicija, j+9))
+                                koordinate.append(pozicija_u_koordinatu(pozicija, j+9))
                     elif j in [1, 3, 5, 7] and i==1:
                         if self.izgled[0][j] == "x":
                             if potreba == "broj":
-                                lista = main.nova_lista(self._izgled, pozicija, 2)
+                                lista = nova_lista(self._izgled, pozicija, 2)
                                 potezi.append(Tabla(lista))
                             elif potreba == "potezi_koordinate":
-                                koordinate.append(main.pozicija_u_koordinatu(pozicija, 2))
+                                koordinate.append(pozicija_u_koordinatu(pozicija, 2))
                         elif self.izgled[2][j] == "x":
                             if potreba == "broj":
-                                lista = main.nova_lista(self._izgled, pozicija, 18)
+                                lista = nova_lista(self._izgled, pozicija, 18)
                                 potezi.append(Tabla(lista))
                             elif potreba == "potezi_koordinate":
-                                koordinate.append(main.pozicija_u_koordinatu(pozicija, 18))
+                                koordinate.append(pozicija_u_koordinatu(pozicija, 18))
         if potreba == "broj":
             return potezi
         elif potreba == "potezi_koordinate":
@@ -158,7 +158,7 @@ class Tabla(object):
             boja2 = "▢"
         else:
             boja2 = "■"
-        if main.nova_lista(self._izgled, koji, gde) in self.validni_potezi_faza2(boja2, "broj"):
+        if nova_lista(self._izgled, koji, gde) in self.validni_potezi_faza2(boja2, "broj"):
             return True
         else:
             return False
