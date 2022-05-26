@@ -1,4 +1,6 @@
-from red import Queue
+import strukture_podataka
+import strukture_podataka.red
+from strukture_podataka.red import Queue
 
 class CvorStabla(object):
     def __init__(self, vrednost):
@@ -39,7 +41,7 @@ class CvorStabla(object):
             self._deca.append(vrednost)
         else:
             for i in range(len(self._deca)):                   #sortirana deca, od najveće vrednosti do najmanje
-                if self._deca[i]._vrednost <= vrednost._vrednost:
+                if self._deca[i]._izgled <= vrednost._izgled:
                     self._deca.insert(i, vrednost)
     def _ukloni_dete_(self, vrednost):
         self._deca.remove(vrednost)
@@ -55,6 +57,20 @@ class CvorStabla(object):
 class Stablo(object):
     def __init__(self, koren=None):
         self._root = koren
+        self._trenutni = koren
+
+    @property
+    def koren(self):
+        return self._koren
+    @koren.setter
+    def koren(self, value):
+        self._koren = value
+    @property
+    def trenutni(self):
+        return self._trenutni
+    @trenutni.setter
+    def trenutni(self, value):
+        self._trenutni = value
 
     def preorder(self, cvor):
         if self._is_empty_ != True:
@@ -68,7 +84,7 @@ class Stablo(object):
             print(cvor)
     def breadth_first(self):
         if self._is_empty_ != True:
-            red = Queue(100)
+            red = Queue(500)
             red.enqueue(self._root)
             while red.is_empty != False:
                 if red.is_empty() == True:

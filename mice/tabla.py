@@ -1,6 +1,6 @@
-import ispisTable
-import heuristika
-import main
+from mice.ispisTable import *
+from mice.heuristika import *
+from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1, pozicija_u_koordinatu_faza1
 
 class Tabla(object):
     def __init__(self, lista, faza):
@@ -8,15 +8,18 @@ class Tabla(object):
         self._roditelj = None
         self._deca = []
         self._faza = faza
-        self._boja = main._boja
-        self._heuristickavrednost = heuristika.heuristika(self._izgled, self._faza, main.boja)
+        self._boja = "▢"
     def __str__(self):
         ispisTable.ispisTable(self._izgled)
         return ""
     def __lt__(self, other):
-        return self._heuristickavrednost < other._heuristickavrednost
+        heuristickavrednost1 = heuristika(self._izgled, self._faza, self._boja)
+        heuristickavrednost2 = heuristika(other._izgled, other._faza, self._boja)
+        return heuristickavrednost1 < heuristickavrednost2
     def __eq__(self, other):
-        return self._heuristickavrednost == other._heuristickavrednost
+        heuristickavrednost1 = heuristika.heuristika(self._izgled, self._faza, self._boja)
+        heuristickavrednost2 = heuristika.heuristika(other._izgled, other._faza, self._boja)
+        return heuristickavrednost1 == heuristickavrednost2
 
     @property
     def izgled(self):
@@ -42,12 +45,6 @@ class Tabla(object):
     @faza.setter
     def faza(self, value):
         self._faza = value
-    @property
-    def heuristickavrednost(self):
-        return self._heuristickavrednost
-    @heuristickavrednost.setter
-    def heuristickavrednost(self, value):
-        self._heuristickavrednost = value
 
     def _is_root_(self):
         return self._roditelj == None
@@ -76,17 +73,19 @@ class Tabla(object):
         potezi = []
         pozicija=0
         koordinate = []
-        for i in len(self._izgled):
-            for j in len(self._izgled[i]):
+        for i in range(len(self._izgled)):
+            for j in range(len(self._izgled[i])):
                 if j == 7:
                     sledece = 0
+                else:
+                    sledece = j + 1
                 pozicija+=1
                 if self._izgled[i][j] == "x":
                     if potreba == "broj":
-                        lista = main.nova_lista_faza1(self._izgled, boja, i*8+sledece)
-                        potezi.append(Tabla(lista))
+                        lista = nova_lista_faza1(self._izgled, boja, i*8+sledece)
+                        potezi.append(Tabla(lista, self._faza))
                     elif potreba == "potezi_koordinate":
-                        koordinate.append(main.pozicija_u_koordinatu(pozicija, i*8+sledece))
+                        koordinate.append(pozicija_u_koordinatu_faza1(pozicija))
         if potreba == "broj":
             return potezi
         elif potreba == "potezi_koordinate":

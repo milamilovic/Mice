@@ -2,8 +2,11 @@
 #Projekat iz predmeta Algoritmi i strukture podataka
 #Program za igru mice (Nine Men's Morris)
 
-import mice
 import strukture_podataka
+from strukture_podataka.stablo import *
+from strukture_podataka.hashmap import *
+import mice
+from mice.igra import *
 from copy import deepcopy
 
 def Pravila():
@@ -28,8 +31,13 @@ def pozicija_u_koordinatu(koje, gde):       #dobijemo brojeve do 1 do 24 koji pi
     gde_pomeramo = koordinate[gde - 1]
     return koji_pion + " ---> " + gde_pomeramo
 
+def pozicija_u_koordinatu_faza1(gde):
+    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    gde_pomeramo = koordinate[gde - 1]
+    return "Postaviti pion na koordinatu " + gde_pomeramo
+
 def koordinata_u_poziciju_faza1(potez):
-    koji_pion = potez[:2]
+    koji_pion = potez[-2:]
     pozicije = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
     koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
     koji = pozicije[koordinate.index(koji_pion)]
@@ -58,8 +66,8 @@ def nova_lista(stara_lista, koja_pozicija, gde):        #pretpostavlja se da je 
 
 def nova_lista_faza1(stara_lista, boja, gde):
     lista = [[], [], []]
-    for i in len(stara_lista):
-        for j in len(stara_lista[i]):
+    for i in range(len(stara_lista)):
+        for j in range(len(stara_lista[i])):
             lista[i].append(stara_lista[i][j])
     gdei = gde//8
     gdej = gde%8
@@ -71,10 +79,11 @@ if __name__ == "__main__":
     i = mice.igra.Igra()
     koren = strukture_podataka.stablo.CvorStabla(deepcopy(i._trenutno_stanje))
     stablo = strukture_podataka.stablo.Stablo(koren)
-    for potez in koren.validni_potezi_faza1(i._na_potezu, "broj"):
+    for potez in i._trenutno_stanje.validni_potezi_faza1(i._na_potezu, "broj"):
         potencijalna_tabla = deepcopy(potez)
-        koren.dodaj_dete(potencijalna_tabla)
+        stablo.dodaj_dete(koren, potencijalna_tabla)
     hash_map = strukture_podataka.hashmap.HashMap()
+    boja = "▢"
     i.igraj(stablo, hash_map)
     # boja="55555"
     # while boja not in ["1", "2"]:

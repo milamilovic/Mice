@@ -1,4 +1,6 @@
-from mapa import ElementMape, Mapa
+import strukture_podataka
+from strukture_podataka import mapa
+from strukture_podataka.mapa import ElementMape, Mapa
 import random
 from operator import __xor__, xor
 

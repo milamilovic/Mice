@@ -1,6 +1,5 @@
-import main
-
 def heuristika(tabla, faza, boja, gde=0):
+    from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1
     if boja == "■":
             boja2 = "▢"
     else:
@@ -45,7 +44,7 @@ def paralelni_mlinovi(tabla, boja):
             paralelni -= 1
 
 def novi_mlin(tabla, boja):     #vraca brojcanu vrednost koja je broj mlinova napravljenih u ovom potezu
-    return tabla.broj_mlinova(tabla, boja) - tabla._roditelj.broj_mlinova(tabla, boja)
+    return broj_mlinova(tabla, boja) - broj_mlinova(tabla, boja)
 
 def broj_mlinova(tabla, boja):          #vraca broj nasih mlinova minus broj mlinova suparnika
     broj_mlinova = 0
@@ -59,14 +58,14 @@ def broj_mlinova(tabla, boja):          #vraca broj nasih mlinova minus broj mli
             l=j+1
             if j==7:
                 l=0
-            if tabla._izgled[i][j] == tabla._izgled[i][k] == tabla._izgled[i][l] == boja:
+            if tabla[i][j] == tabla[i][k] == tabla[i][l] == boja:
                 broj_mlinova += 1
-            elif tabla._izgled[i][j] == tabla._izgled[i][k] == tabla._izgled[i][l] == boja2:
+            elif tabla[i][j] == tabla[i][k] == tabla[i][l] == boja2:
                 broj_mlinova -= 1
     for j in range(1, 8, 2):
-        if tabla._izgled[0][j] == tabla._izgled[1][j] == tabla._izgled[2][j] == boja:
+        if tabla[0][j] == tabla[1][j] == tabla[2][j] == boja:
             broj_mlinova +=1
-        elif tabla._izgled[0][j] == tabla._izgled[1][j] == tabla._izgled[2][j] == boja2:
+        elif tabla[0][j] == tabla[1][j] == tabla[2][j] == boja2:
             broj_mlinova -= 1
     return broj_mlinova
 
@@ -84,21 +83,21 @@ def broj_blokiranih_figura(tabla, boja):           #vraca broj blokiranih figura
                 prethodno = 7
             elif j == 7:
                 sledece = 0
-            if tabla._izgled[i][j] == boja2: #ako je protivnikova figurica tamo
-                if tabla._izgled[i][prethodno]==boja and tabla._izgled[i][sledece]==boja:
+            if tabla[i][j] == boja2: #ako je protivnikova figurica tamo
+                if tabla[i][prethodno]==boja and tabla[i][sledece]==boja:
                     if j in [0, 2, 4, 6]:
                         broj_blokiranih_figura -= 1
-                    elif i  == 1 and tabla._izgled[0][j] == tabla._izgled[2][j] == boja:
+                    elif i  == 1 and tabla[0][j] == tabla[2][j] == boja:
                         broj_blokiranih_figura -= 1
-                    elif tabla._izgled[1][j] == boja:
+                    elif tabla[1][j] == boja:
                         broj_blokiranih_figura -= 1
-            elif tabla._izgled[i][j] == boja:   #ako je nasa figura tamo
-                if tabla._izgled[i][prethodno]==boja2 and tabla._izgled[i][sledece]==boja2:
+            elif tabla[i][j] == boja:   #ako je nasa figura tamo
+                if tabla[i][prethodno]==boja2 and tabla[i][sledece]==boja2:
                     if j in [0, 2, 4, 6]:
                         broj_blokiranih_figura += 1
-                    elif i  == 1 and tabla._izgled[0][j] == tabla._izgled[2][j] == boja2:
+                    elif i  == 1 and tabla[0][j] == tabla[2][j] == boja2:
                         broj_blokiranih_figura += 1
-                    elif tabla._izgled[1][j] == boja2:
+                    elif tabla[1][j] == boja2:
                         broj_blokiranih_figura += 1
     return broj_blokiranih_figura
 
@@ -110,45 +109,45 @@ def broj_piona(tabla, boja):            #vraca broj piona minus broj piona supar
     pioni = 0
     for i in range(3):
         for j in range(8):
-            if tabla._izgled[i][j] == boja:
+            if tabla[i][j] == boja:
                 pioni += 1
-            elif tabla._izgled[i][j] == boja2:
+            elif tabla[i][j] == boja2:
                 pioni -= 1
     return pioni
 
 def broj_dvojki(tabla, boja):           #vraca broj dvojki koje postoje na tabli za jednu boju
     pozicija=0
     broj_dvojki = 0
-    for i in range(len(tabla._izgled)):
-        for j in range(1, len(tabla._izgled[i]), 2):
+    for i in range(len(tabla)):
+        for j in range(1, len(tabla[i]), 2):
             pozicija+=2
             sledece = j + 1
             prethodno = j - 1
             if j == 7:
                 sledece = 0
-            if tabla._izgled[i][j] == boja:
-                if tabla._izgled[i][prethodno] == "x" and tabla._izgled[i][sledece] == boja:
+            if tabla[i][j] == boja:
+                if tabla[i][prethodno] == "x" and tabla[i][sledece] == boja:
                     broj_dvojki += 1
-                elif tabla._izgled[i][prethodno] == boja and tabla._izgled[i][sledece] == "x":
-                    broj_dvojki += 1
-                if i in [0, 2]:
-                    if tabla._izgled[1][j] == "x" and tabla._izgled[abs(i - 2)][j] == boja:
-                        broj_dvojki += 1
-                    elif tabla._izgled[1][j] == boja and tabla._izgled[abs(i - 2)][j] == "x":
-                        broj_dvojki += 1
-                elif i==1:
-                    if tabla._izgled[0][j] == "x" and tabla._izgled[2][j] == boja:
-                        broj_dvojki += 1
-                    elif tabla._izgled[0][j] == boja and tabla._izgled[2][j] == "x":
-                        broj_dvojki += 1
-            elif tabla._izgled[i][j] == "x":
-                if tabla._izgled[i][prethodno] == boja and tabla._izgled[i][sledece] == boja:
+                elif tabla[i][prethodno] == boja and tabla[i][sledece] == "x":
                     broj_dvojki += 1
                 if i in [0, 2]:
-                    if tabla._izgled[1][j] == boja and tabla._izgled[abs(i - 2)][j] == boja:
+                    if tabla[1][j] == "x" and tabla[abs(i - 2)][j] == boja:
+                        broj_dvojki += 1
+                    elif tabla[1][j] == boja and tabla[abs(i - 2)][j] == "x":
                         broj_dvojki += 1
                 elif i==1:
-                    if tabla._izgled[0][j] == boja and tabla._izgled[2][j] == boja:
+                    if tabla[0][j] == "x" and tabla[2][j] == boja:
+                        broj_dvojki += 1
+                    elif tabla[0][j] == boja and tabla[2][j] == "x":
+                        broj_dvojki += 1
+            elif tabla[i][j] == "x":
+                if tabla[i][prethodno] == boja and tabla[i][sledece] == boja:
+                    broj_dvojki += 1
+                if i in [0, 2]:
+                    if tabla[1][j] == boja and tabla[abs(i - 2)][j] == boja:
+                        broj_dvojki += 1
+                elif i==1:
+                    if tabla[0][j] == boja and tabla[2][j] == boja:
                         broj_dvojki += 1
     return broj_dvojki
 

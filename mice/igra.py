@@ -1,9 +1,7 @@
 from mice.heuristika import heuristika
 from mice.tabla import Tabla
-import tabla
 from copy import deepcopy
 from time import time
-import main
 
 class Igra(object):
 
@@ -37,6 +35,7 @@ class Igra(object):
         pass
 
     def igraj(self, stablo, hesmapa):
+        import main
         for i in range(9):                  #faza 1
             print()
             print("Kompjuter je na potezu!")
@@ -50,10 +49,11 @@ class Igra(object):
             print("Mogući potezi su: ")
             for i in range(1, len(potezi)+1):
                 print(str(i) + ". " + potezi[i-1])
-            while potez < 1 and potez > len(potezi):
+            potez=-3
+            while potez not in range(1, len(potezi)+1):
                 potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
             gde = main.koordinata_u_poziciju_faza1(potezi[potez-1])
-            novo_stanje = main.nova_lista_faza1(self._trenutno_stanje, "■", gde)
+            novo_stanje = Tabla(main.nova_lista_faza1(self._trenutno_stanje._izgled, "■", gde), 1)
             self._trenutno_stanje = novo_stanje
             self._na_potezu = "▢"
         while heuristika.pobednicka_konfiguracija() != 1000 or heuristika.pobednicka_konfiguranica != -1000:    #faza 2
