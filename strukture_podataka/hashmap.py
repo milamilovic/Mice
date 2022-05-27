@@ -6,7 +6,9 @@ from operator import __xor__, xor
 
 class HashMap(object):          #kolizije se resavaju ulancavanjem
     def __init__(self, inicijalni_kapacitet = 64):
-        self._data = inicijalni_kapacitet * []
+        self._data = []
+        for i in range(inicijalni_kapacitet):
+            self._data.append(Mapa())
         self._kapacitet = inicijalni_kapacitet
         self._prost_broj = 2637245579
         self._velicina = 0
@@ -32,13 +34,13 @@ class HashMap(object):          #kolizije se resavaju ulancavanjem
                 polje = tabla[i][j]                 #rendom vrednosti podignemo na stepen te random vrednosti
                 vrednost_polja = self._vrednost_table[i][j]
                 if polje == "▢":
-                    vrednost = vrednost_polja[1]
+                    vrednost = vrednost_polja[0]
                 elif polje == "■":
-                    vrednost = vrednost_polja[2]
+                    vrednost = vrednost_polja[1]
                 else:
                     vrednost = 1
                 hesirana = xor(hesirana, vrednost)
-        return ((hesirana*self._a + self._b) % self._prost_broj) % self._kapacitet      #kompresovanje kljuca
+        return (((hesirana*self._a + self._b) % self._prost_broj) % self._kapacitet)      #kompresovanje kljuca
 
     def resize(self, novi_kapacitet):
         stari_podaci = list(self.items())
@@ -68,8 +70,7 @@ class HashMap(object):          #kolizije se resavaju ulancavanjem
         return self._data[bucket_index][kljuc]
     def bucket_set_element(self, bucket_index, kljuc, vrednost):
         bucket = self._data[bucket_index]
-        if bucket is None:
-            self._data[bucket_index] = Mapa()
+        bucket[kljuc] = vrednost
         trenutna_velicina = len(self._data[bucket_index])
         self._data[bucket_index][kljuc] = vrednost
         if len(self._data[bucket_index]) > trenutna_velicina:

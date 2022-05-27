@@ -1,5 +1,7 @@
 def heuristika(tabla, faza, boja, gde=0):
     from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1
+    if tabla == []:
+        return -1000000000000000000
     if boja == "■":
             boja2 = "▢"
     else:

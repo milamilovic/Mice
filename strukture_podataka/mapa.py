@@ -12,6 +12,7 @@ class ElementMape(object):
     @vrednost.setter
     def vrednost(self, value):
         self._vrednost = value
+    
 
 
 class Mapa(object):
@@ -28,18 +29,18 @@ class Mapa(object):
         for element in self._data:
             yield element._kljuc
     
-    def get_element(self, trazeni_kljuc):
+    def __getitem__(self, trazeni_kljuc):
         for element in self._data:
             if element._kljuc == trazeni_kljuc:
                 return element._vrednost
         print("Ne postoji element sa ključem " + str(trazeni_kljuc))
-    def set_element(self, trazeni_kljuc, nova_vrednost):
+    def __setitem__(self, trazeni_kljuc, nova_vrednost):
         for element in self._data:
             if element._kljuc == trazeni_kljuc:
                 element._vrednost = nova_vrednost
                 return
         self._data.append(ElementMape(trazeni_kljuc, nova_vrednost))
-    def obrisi_element(self, trazeni_kljuc):
+    def __delitem__(self, trazeni_kljuc):
         for i in range(len(self._data)):
             if self._data[i]._kljuc == trazeni_kljuc:
                 self._data.pop(i)

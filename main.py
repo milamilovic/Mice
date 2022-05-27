@@ -77,7 +77,7 @@ def nova_lista_faza1(stara_lista, boja, gde):
 if __name__ == "__main__":
     Pravila()
     i = mice.igra.Igra()
-    koren = strukture_podataka.stablo.CvorStabla(deepcopy(i._trenutno_stanje))
+    koren = strukture_podataka.stablo.CvorStabla(deepcopy(i._trenutno_stanje._izgled))
     stablo = strukture_podataka.stablo.Stablo(koren)
     # potezip = i._trenutno_stanje.validni_potezi_faza1(i._na_potezu, "broj")
     # potezi = []
