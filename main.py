@@ -26,28 +26,28 @@ def Pravila():
     print()
 
 def pozicija_u_koordinatu(koje, gde):       #dobijemo brojeve do 1 do 24 koji pion gde pomeramo
-    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
     koji_pion = koordinate[koje-1]
     gde_pomeramo = koordinate[gde - 1]
     return koji_pion + " ---> " + gde_pomeramo
 
 def pozicija_u_koordinatu_faza1(gde):
-    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
     gde_pomeramo = koordinate[gde - 1]
     return "Postaviti pion na koordinatu " + gde_pomeramo
 
 def koordinata_u_poziciju_faza1(potez):
     koji_pion = potez[-2:]
-    pozicije = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
     koji = pozicije[koordinate.index(koji_pion)]
     return koji
 
 def koordinata_u_poziciju(potez):
     koji_pion = potez[:2]
     gde_pomeramo = potez[-2:]
-    pozicije = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
     koji = pozicije[koordinate.index(koji_pion)]
     gde = pozicije[koordinate.index(gde_pomeramo)]
     return koji, gde
@@ -79,11 +79,15 @@ if __name__ == "__main__":
     i = mice.igra.Igra()
     koren = strukture_podataka.stablo.CvorStabla(deepcopy(i._trenutno_stanje))
     stablo = strukture_podataka.stablo.Stablo(koren)
-    for potez in i._trenutno_stanje.validni_potezi_faza1(i._na_potezu, "broj"):
-        potencijalna_tabla = deepcopy(potez)
-        stablo.dodaj_dete(koren, potencijalna_tabla)
+    # potezip = i._trenutno_stanje.validni_potezi_faza1(i._na_potezu, "broj")
+    # potezi = []
+    # for potez in potezip:
+    #     potezi.append(potez._izgled)
+    # for potez in potezi:
+    #     stablo.dodaj_dete(koren, CvorStabla(potez))
     hash_map = strukture_podataka.hashmap.HashMap()
     boja = "▢"
+    pocetak = input("Pritisnite bilo koji taster za pocetak igre: ")
     i.igraj(stablo, hash_map)
     # boja="55555"
     # while boja not in ["1", "2"]:

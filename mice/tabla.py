@@ -1,5 +1,6 @@
 from mice.ispisTable import *
 from mice.heuristika import *
+import main
 from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1, pozicija_u_koordinatu_faza1
 
 class Tabla(object):
@@ -17,8 +18,8 @@ class Tabla(object):
         heuristickavrednost2 = heuristika(other._izgled, other._faza, self._boja)
         return heuristickavrednost1 < heuristickavrednost2
     def __eq__(self, other):
-        heuristickavrednost1 = heuristika.heuristika(self._izgled, self._faza, self._boja)
-        heuristickavrednost2 = heuristika.heuristika(other._izgled, other._faza, self._boja)
+        heuristickavrednost1 = heuristika(self._izgled, self._faza, self._boja)
+        heuristickavrednost2 = heuristika(other._izgled, other._faza, self._boja)
         return heuristickavrednost1 == heuristickavrednost2
 
     @property
@@ -68,13 +69,15 @@ class Tabla(object):
         return self._deca
     def broj_dece(self):
         return len(self._deca)
+    def __len__(self):
+        return len(self._izgled)
 
     def validni_potezi_faza1(self, boja, potreba):
         potezi = []
         pozicija=0
         koordinate = []
-        for i in range(len(self._izgled)):
-            for j in range(len(self._izgled[i])):
+        for i in range(3):
+            for j in range(8):
                 if j == 7:
                     sledece = 0
                 else:

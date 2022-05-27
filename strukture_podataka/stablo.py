@@ -9,7 +9,6 @@ class CvorStabla(object):
         self._deca = []
     def __str__(self):
         return str(self._vrednost)
-
     @property
     def vrednost(self):
         return self._vrednost
@@ -35,14 +34,7 @@ class CvorStabla(object):
         return self._deca == []
     def _dodaj_dete_(self, vrednost):
         vrednost._roditelj = self
-        if len(self._deca) == 0:
-            self._deca.append(vrednost)
-        elif vrednost<self._deca[-1]:
-            self._deca.append(vrednost)
-        else:
-            for i in range(len(self._deca)):                   #sortirana deca, od najveće vrednosti do najmanje
-                if self._deca[i]._izgled <= vrednost._izgled:
-                    self._deca.insert(i, vrednost)
+        self._deca.append(vrednost)
     def _ukloni_dete_(self, vrednost):
         self._deca.remove(vrednost)
     def nadji_roditelja(self):
