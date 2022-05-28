@@ -1,4 +1,4 @@
-from mice.heuristika import heuristika, pozicija
+from mice.heuristika import heuristika, pozicija, pobednicka_konfiguracija
 from mice.tabla import Tabla
 from copy import deepcopy
 from time import time
@@ -10,12 +10,12 @@ class Igra(object):
     __slots__ = ["_trenutno_stanje", "_na_potezu"]
 
     def __init__(self):
-        self._trenutno_stanje = Tabla([["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"]], 1)
+        self._trenutno_stanje = Tabla([["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"]], 1, "▢")
         self._na_potezu = "▢"           #kompjuter prvi igra
 
     def varijabilna_dubina(self, tabla, proteklo_vreme_od_pocetka_poteza):
         if tabla._faza == 1:
-            moguci_potezi = len(tabla.validni_potezi_faza1(self._na_potezu, "broj"))
+            moguci_potezi = len(tabla.validni_potezi_faza1(self._na_potezu, "broj")[0])
         else:
             moguci_potezi = len(tabla.validni_potezi_faza2(self._na_potezu, "broj"))
         if proteklo_vreme_od_pocetka_poteza>=2.5:
@@ -30,13 +30,13 @@ class Igra(object):
     def kompjuter_potez_faza1(self, stablo, hash_map, broj_postavljenih):
         proteklo_vreme = 0
         dubina = self.varijabilna_dubina(self._trenutno_stanje, proteklo_vreme)
-        potez = self.minimax1(broj_postavljenih, self._trenutno_stanje, dubina, hash_map, proteklo_vreme, stablo._trenutni, "▢", "■")
+        potez = self.minimax1(broj_postavljenih, [self._trenutno_stanje, 0], dubina, hash_map, proteklo_vreme, stablo._trenutni, "▢", "■")[1][0]
         return potez
 
     def kompjuter_potez(self, stablo, hash_map):
         proteklo_vreme = 0
         dubina = self.varijabilna_dubina(self._trenutno_stanje, proteklo_vreme)
-        potez = self.minimax2(self._trenutno_stanje, dubina, hash_map, proteklo_vreme, stablo._trenutni, "▢", "■")
+        potez = self.minimax2(self._trenutno_stanje, dubina, hash_map, proteklo_vreme, stablo._trenutni, "▢", "■")[1]
         return potez
 
     def minimax1(self, broj_postavljenih, tabla, dubina, hash_map, proteklo_vreme, cvor_stabla, igrac, drugi_igrac, alfa = -10000000000, beta = 10000000000):
@@ -44,10 +44,14 @@ class Igra(object):
             vreme = time()
             if dubina == 0:
                 try:
-                    vrednost = hash_map[tabla]
+                    vrednost = hash_map[tabla[0]]
                 except:
                     tabla_trenutna = cvor_stabla._vrednost
+                    if cvor_stabla._roditelj == None:
+                        return 0, [Tabla([], 1, igrac), 0], proteklo_vreme
                     tabla_roditelja = cvor_stabla._roditelj._vrednost
+                    if tabla_roditelja == tabla_trenutna:
+                        pass
                     pozicija = -1
                     for i in range(3):
                         for j in range(8):
@@ -57,20 +61,124 @@ class Igra(object):
                                 break
                     pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
                     gde = pozicije[trazena]
-                    vrednost = heuristika(tabla._izgled, 1, igrac, gde)
-                    privremena = Tabla(tabla_trenutna, 1)
-                    hash_map[tabla._izgled] = vrednost, tabla_trenutna, privremena.validni_potezi_faza1
+                    vrednost = heuristika(cvor_stabla, 1, igrac, gde)
+                    privremena = Tabla(tabla_trenutna, 1, igrac)
+                    hash_map[tabla[0]._izgled] = vrednost, tabla_trenutna, privremena.validni_potezi_faza1(igrac, "boja")
                     proteklo_vreme += time() - vreme
-                    naj_potez = []
+                    naj_potez = [Tabla([], 1, igrac), 0]
             elif broj_postavljenih == 9:
-                vrednost, naj_potez, proteklo_vreme = self.minimax2(self, tabla, dubina, hash_map, proteklo_vreme, cvor_stabla, igrac, drugi_igrac, alfa = -10000000000, beta = 10000000000)
+                vrednost, naj_potezic, proteklo_vreme = self.minimax2(tabla[0], dubina, hash_map, proteklo_vreme, cvor_stabla, igrac, drugi_igrac, alfa, beta)
                 proteklo_vreme += time() - vreme()
+                naj_potez = [naj_potezic, 0]
             return vrednost, naj_potez, proteklo_vreme           #vraca vrednost, najbolji potez i vreme koje je proteklo do sad
         if igrac == "▢":            #kompjuter, maximizer
-            vrednost = -100000000000000
-            najbolji_potez = ''
+            vrednost = -10000000000
+            najbolji_potez = [Tabla([], 1, igrac), 0]
             potezi = []
-            for potez in Tabla(cvor_stabla._vrednost, 1).validni_potezi_faza1(igrac, "broj"):
+            for potez in Tabla(cvor_stabla._vrednost, 1, igrac).validni_potezi_faza1(igrac, "broj"):
+                potezi.append(potez)
+                cvoric = CvorStabla(potez[0]._izgled)
+                if cvoric not in cvor_stabla._deca:
+                    if cvoric._vrednost != cvor_stabla._vrednost:
+                        cvor_stabla._dodaj_dete_(cvoric)
+            for potez in potezi:
+                vrednosti_dece = []
+                for dete in cvor_stabla._deca:
+                    vrednosti_dece.append(dete)
+                for detence in range(len(vrednosti_dece)):
+                    if potez[0]._izgled == vrednosti_dece[detence]._vrednost:
+                        cvor = vrednosti_dece[detence]
+                        break
+                    else:
+                        cvor = CvorStabla(potez[0]._izgled)
+                        if cvor in cvor_stabla._deca:
+                            cvor_stabla._dodaj_dete_(cvor)
+                try:
+                    hash_map[potez[0]] = nova_vrednost, najbolji_potez, vreme
+                except:
+                    start = time()
+                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
+                    hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
+                    proteklo_vreme += time() - start
+                vrednost = max(vrednost, nova_vrednost)
+                alfa = max(alfa, vrednost)
+                if beta < alfa:
+                    break
+                if vrednost == nova_vrednost:
+                    najbolji_potez = potez
+                # if proteklo_vreme > 2.5:
+                #     break
+            if najbolji_potez == [Tabla([], 1, igrac), 0]:
+                najbolji_potez = Tabla(cvor_stabla._vrednost, 1, igrac).validni_potezi_faza1(igrac, "broj")
+            return vrednost, najbolji_potez, proteklo_vreme
+        else:               #igrac, minimizer
+            vrednost = 10000000000
+            najbolji_potez = [Tabla([], 1, igrac), 0]
+            potezi = []
+            for potez in Tabla(cvor_stabla._vrednost, 1, igrac).validni_potezi_faza1(igrac, "broj"):
+                potezi.append(potez)
+                cvoric = CvorStabla(potez[0]._izgled)
+                if cvoric not in cvor_stabla._deca:
+                    cvor_stabla._dodaj_dete_(cvoric)
+            for potez in potezi:
+                vrednosti_dece = []
+                for dete in cvor_stabla._deca:
+                    vrednosti_dece.append(dete)
+                for detence in range(len(vrednosti_dece)):
+                    if potez[0]._izgled == vrednosti_dece[detence]._vrednost:
+                        cvor = vrednosti_dece[detence]
+                        break
+                    else:
+                        cvor = CvorStabla(potez[0]._izgled)
+                        if cvor in cvor_stabla._deca:
+                            cvor_stabla._dodaj_dete_(cvor)
+                try:
+                    hash_map[potez[0]] = nova_vrednost, najbolji_potez, vreme
+                except:
+                    start = time()
+                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
+                    hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
+                    proteklo_vreme += time() - start
+                vrednost = min(vrednost, nova_vrednost)
+                beta = min(beta, vrednost)
+                if beta < alfa:
+                    break
+                if vrednost == nova_vrednost:
+                    najbolji_potez = potez
+                # if proteklo_vreme > 2.5:
+                #     break
+            if najbolji_potez == Tabla([], 1, igrac):
+                najbolji_potez = Tabla(cvor_stabla._vrednost, 1, igrac).validni_potezi_faza1(igrac, "broj")
+            return vrednost, najbolji_potez, proteklo_vreme
+
+    def minimax2(self, tabla, dubina, hash_map, proteklo_vreme, cvor_stabla, igrac, drugi_igrac, alfa = -10000000000, beta = 10000000000):
+        vreme = time()
+        if dubina == 0:             #bazni slucaj
+            try:
+                vrednost = hash_map[tabla][0]
+            except:
+                tabla_trenutna = cvor_stabla._vrednost
+                tabla_roditelja = cvor_stabla._roditelj._vrednost
+                pozicija = -1
+                for i in range(3):
+                    for j in range(8):
+                        pozicija += 1
+                        if tabla_trenutna[i][j] != tabla_roditelja[i][j]:
+                            trazena = pozicija
+                            break
+                pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+                gde = pozicije[trazena]
+                vrednost = heuristika(cvor_stabla, 2, igrac, gde)
+                privremena = Tabla(tabla_trenutna, 2, igrac)
+                hash_map[tabla._izgled] = vrednost, tabla_trenutna, privremena.validni_potezi_faza2(igrac, "boja")
+                proteklo_vreme += time() - vreme
+                naj_potez = []
+            return vrednost, naj_potez, proteklo_vreme               #vraca vrednost, najbolji potez i vreme koje je proteklo do sad
+        if igrac == "▢":            #kompjuter, maximizer
+            vrednost = -10000000000
+            najbolji_potez = Tabla([], 1, igrac)
+            potezi = []
+            for potez in Tabla(cvor_stabla._vrednost, 2, igrac).validni_potezi_faza2(igrac, "broj"):
                 potezi.append(potez)
                 cvoric = CvorStabla(potez._izgled)
                 if cvoric not in cvor_stabla._deca:
@@ -85,12 +193,12 @@ class Igra(object):
                         break
                     else:
                         cvor = CvorStabla(potez._izgled)
-                        cvor_stabla._dodaj_dete(cvor)
+                        cvor_stabla._dodaj_dete_(cvor)
                 try:
                     hash_map[potez] = nova_vrednost, najbolji_potez, vreme
                 except:
                     start = time()
-                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
+                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                     hash_map[tabla._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
                     proteklo_vreme += time() - start
                 vrednost = max(vrednost, nova_vrednost)
@@ -99,16 +207,16 @@ class Igra(object):
                     break
                 if vrednost == nova_vrednost:
                     najbolji_potez = potez
-                if proteklo_vreme >= 2.5:
-                    break
-                if najbolji_potez == Tabla([], 1):
-                    najbolji_potez = Tabla(cvor_stabla._vrednost, 1).validni_potezi_faza1(igrac, "broj")[0]
-                return vrednost, najbolji_potez, proteklo_vreme
+                if proteklo_vreme > 2.5:
+                     break
+            if najbolji_potez == Tabla([], 2, igrac):
+                najbolji_potez = Tabla(cvor_stabla._vrednost, 2, igrac).validni_potezi_faza2(igrac, "broj")[0]
+            return vrednost, najbolji_potez, proteklo_vreme
         else:               #igrac, minimizer
-            vrednost = 100000000000000
-            najbolji_potez = ''
+            vrednost = 10000000000
+            najbolji_potez = Tabla([], 1, igrac)
             potezi = []
-            for potez in Tabla(cvor_stabla._vrednost, 1).validni_potezi_faza1(igrac, "broj"):
+            for potez in Tabla(cvor_stabla._vrednost, 2, igrac).validni_potezi_faza2(igrac, "broj"):
                 potezi.append(potez)
                 cvoric = CvorStabla(potez._izgled)
                 if cvoric not in cvor_stabla._deca:
@@ -128,7 +236,7 @@ class Igra(object):
                     hash_map[potez] = nova_vrednost, najbolji_potez, vreme
                 except:
                     start = time()
-                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
+                    nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                     hash_map[tabla._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
                     proteklo_vreme += time() - start
                 vrednost = min(vrednost, nova_vrednost)
@@ -137,23 +245,12 @@ class Igra(object):
                     break
                 if vrednost == nova_vrednost:
                     najbolji_potez = potez
-                if proteklo_vreme >= 2.5:
+                if proteklo_vreme > 2.5:
                     break
-                if najbolji_potez == Tabla([], 1):
-                    najbolji_potez = Tabla(cvor_stabla._vrednost, 1).validni_potezi_faza1(igrac, "broj")[0]
-                return vrednost, najbolji_potez, proteklo_vreme
+            if najbolji_potez == Tabla([], 2, igrac):
+                najbolji_potez = Tabla(cvor_stabla._vrednost, 2, igrac).validni_potezi_faza2(igrac, "broj")[0]
+            return vrednost, najbolji_potez, proteklo_vreme
 
-    def minimax2(igra, tabla, dubina, hash_map, proteklo_vreme, cvor_stabla, igrac, drugi_igrac, alfa = -10000000000, beta = 10000000000):
-        vreme = time()
-        if dubina == 0:             #bazni slucaj
-            try:
-                vrednost = hash_map[tabla]
-            except:
-                vrednost = heuristika(tabla, 2, igrac)
-                privremena = Tabla(cvor_stabla._vrednost)
-                hash_map[tabla] = vrednost, cvor_stabla._vrednost, privremena.validni_potezi_faza1
-        proteklo_vreme += time() - vreme
-        return vrednost, None, proteklo_vreme               #vraca vrednost, najbolji potez i vreme koje je proteklo do sad
 
     def igraj(self, stablo, hesmapa):
         import main
@@ -161,12 +258,14 @@ class Igra(object):
             print()
             print("Kompjuter je na potezu!")
             print()
-            potez = Tabla(self.kompjuter_potez_faza1(stablo, hesmapa, i), 1)
+            potez = self.kompjuter_potez_faza1(stablo, hesmapa, i)
             self._trenutno_stanje = potez
             for dete in stablo._trenutni._deca:
-                if dete == potez:
+                if dete._vrednost == potez._izgled:
                     stablo._trenutni = dete
             self._na_potezu = "■"
+            print("Kompjuter je igrao! Stanje table je sledeće: ")
+            print(self._trenutno_stanje)
             print()
             print("Vi ste na potezu!")
             print()
@@ -176,18 +275,33 @@ class Igra(object):
                 print(str(i) + ". " + potezi[i-1])
             potez=-3
             while potez not in range(1, len(potezi)+1):
-                potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                try:
+                    potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                except:
+                    pass
             gde = main.koordinata_u_poziciju_faza1(potezi[potez-1])
-            novo_stanje = Tabla(main.nova_lista_faza1(self._trenutno_stanje._izgled, "■", gde), 1)
+            novo_stanje = Tabla(main.nova_lista_faza1(self._trenutno_stanje._izgled, "■", gde), 1, self._na_potezu)
             self._trenutno_stanje = novo_stanje
             self._na_potezu = "▢"
-        while heuristika.pobednicka_konfiguracija() != 1000 or heuristika.pobednicka_konfiguranica != -1000:    #faza 2
+            for dete in stablo._trenutni._deca:
+                if dete._vrednost == novo_stanje._izgled:
+                    stablo._trenutni = dete
+                    break
+            print("Odigrali ste Vaš potez! Stanje table je sledeće: ")
+            print(self._trenutno_stanje)
+        while pobednicka_konfiguracija(self._trenutno_stanje, self._na_potezu) != 1000 or pobednicka_konfiguracija(self._trenutno_stanje, self._na_potezu) != -1000:    #faza 2
             if self._na_potezu == "▢":
                 print()
                 print("Kompjuter je na potezu!")
                 print()
-                self.kompjuter_potez(stablo, hesmapa)
+                potez = self.kompjuter_potez(stablo, hesmapa)
+                self._trenutno_stanje = potez
+                for dete in stablo._trenutni._deca:
+                    if dete._vrednost == potez._izgled:
+                        stablo._trenutni = dete
                 self._na_potezu = "■"
+                print("Kompjuter je igrao! Stanje table je sledeće: ")
+                print(self._trenutno_stanje)
             else:
                 print()
                 print("Vi ste na potezu!")
@@ -196,17 +310,21 @@ class Igra(object):
                 print("Mogući potezi su: ")
                 for i in range(1, len(potezi)+1):
                     print(str(i) + ". " + potezi[i-1])
-                while potez < 1 and potez > len(potezi):
+                potez=-3
+                while potez not in range(1, len(potezi)+1):
                     potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
-                koji, gde = main.koordinata_u_poziciju(potezi[potez-1])
-                novo_stanje = main.nova_lista(self._trenutno_stanje, koji, gde)
+                gde = main.koordinata_u_poziciju(potezi[potez-1])
+                novo_stanje = Tabla(main.nova_lista(self._trenutno_stanje._izgled, "■", gde), 1, self._na_potezu)
                 self._trenutno_stanje = novo_stanje
                 self._na_potezu = "▢"
-        if heuristika.pobednicka_konfiguracija() == 1000:
+                for dete in stablo._trenutni._deca:
+                    if dete._vrednost == novo_stanje.izgled:
+                        stablo._trenutni = dete
+        if heuristika.pobednicka_konfiguracija(stablo._trenutni, 2) == 1000:
             print()
             print("Izgubili ste! Računar je pobedio!")
             print()
-        elif heuristika.pobednicka_konfiguracija() == -1000:
+        elif heuristika.pobednicka_konfiguracija(stablo._trenutni, 2) == -1000:
             print()
             print("Pobedili ste!")
             print()

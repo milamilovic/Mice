@@ -54,13 +54,16 @@ def koordinata_u_poziciju(potez):
 
 def nova_lista(stara_lista, koja_pozicija, gde):        #pretpostavlja se da je ispravno poslato tj da je gde slobodna
     lista=[[], [], []]
-    for i in len(stara_lista):
-        for j in len(stara_lista[i]):
+    for i in range(len(stara_lista)):
+        for j in range(len(stara_lista[i])):
             lista[i].append(stara_lista[i][j])
-    kojai = koja_pozicija//8
-    kojaj = koja_pozicija%8
-    gdei = gde//8
-    gdej = gde%8
+    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+    koja_po_redu_koja = pozicije.index(koja_pozicija)
+    koja_po_redu_gde = pozicije.index(gde)
+    gdei = koja_po_redu_gde//8
+    gdej = koja_po_redu_gde%8
+    kojai = koja_po_redu_koja//8
+    kojaj = koja_po_redu_koja%8
     lista[kojai][kojaj], lista[gdei][gdej] = lista[gdei][gdej], lista[kojai][kojaj]
     return lista
 
@@ -69,8 +72,10 @@ def nova_lista_faza1(stara_lista, boja, gde):
     for i in range(len(stara_lista)):
         for j in range(len(stara_lista[i])):
             lista[i].append(stara_lista[i][j])
-    gdei = gde//8
-    gdej = gde%8
+    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+    koja_po_redu = pozicije.index(gde)
+    gdei = koja_po_redu//8
+    gdej = koja_po_redu%8
     lista[gdei][gdej] = boja
     return lista
 
@@ -79,12 +84,6 @@ if __name__ == "__main__":
     i = mice.igra.Igra()
     koren = strukture_podataka.stablo.CvorStabla(deepcopy(i._trenutno_stanje._izgled))
     stablo = strukture_podataka.stablo.Stablo(koren)
-    # potezip = i._trenutno_stanje.validni_potezi_faza1(i._na_potezu, "broj")
-    # potezi = []
-    # for potez in potezip:
-    #     potezi.append(potez._izgled)
-    # for potez in potezi:
-    #     stablo.dodaj_dete(koren, CvorStabla(potez))
     hash_map = strukture_podataka.hashmap.HashMap()
     boja = "▢"
     pocetak = input("Pritisnite bilo koji taster za pocetak igre: ")
@@ -99,3 +98,4 @@ if __name__ == "__main__":
     #     boja, boja2 = "▢", "■"
     # else:
     #      boja, boja2 = "■", "▢"
+
