@@ -81,15 +81,12 @@ class Tabla(object):
         koordinate = []
         for i in range(3):
             for j in range(8):
-                if j == 7:
-                    sledece = 0
-                else:
-                    sledece = j + 1
                 pozicija+=1
                 if self._izgled[i][j] == "x":
                     if potreba == "broj":
-                        lista = nova_lista_faza1(self._izgled, boja, pozicija)
-                        potezi.append([Tabla(lista, self._faza, boja), pozicija])
+                        pozicijice = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+                        lista = nova_lista_faza1(self._izgled, boja, pozicijice[pozicija-1])
+                        potezi.append([Tabla(lista, self._faza, boja), pozicijice[pozicija-1]])
                     elif potreba == "potezi_koordinate":
                         koordinate.append(pozicija_u_koordinatu_faza1(pozicija))
         if potreba == "broj":

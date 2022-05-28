@@ -33,7 +33,7 @@ def pozicija_u_koordinatu(koje, gde):       #dobijemo brojeve do 1 do 24 koji pi
 
 def pozicija_u_koordinatu_faza1(gde):
     koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
-    gde_pomeramo = koordinate[gde - 1]
+    gde_pomeramo = koordinate[gde-1]
     return "Postaviti pion na koordinatu " + gde_pomeramo
 
 def koordinata_u_poziciju_faza1(potez):
@@ -69,13 +69,31 @@ def nova_lista(stara_lista, koja_pozicija, gde):        #pretpostavlja se da je 
 
 def nova_lista_faza1(stara_lista, boja, gde):
     lista = [[], [], []]
-    for i in range(len(stara_lista)):
-        for j in range(len(stara_lista[i])):
+    for i in range(3):
+        for j in range(8):
             lista[i].append(stara_lista[i][j])
-    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
-    koja_po_redu = pozicije.index(gde)
-    gdei = koja_po_redu//8
-    gdej = koja_po_redu%8
+    if gde in [1, 2, 3, 15, 24, 23, 22, 10]:
+        gdei = 0
+    elif gde in [4, 5, 6, 14, 21, 20, 19, 11]:
+        gdei = 1
+    else:
+        gdei = 2
+    if gde in [1, 4, 7]:
+        gdej = 0
+    elif gde in [2, 5, 8]:
+        gdej = 1
+    elif gde in [3, 6, 9]:
+        gdej = 2
+    elif gde in [13, 14, 15]:
+        gdej = 3
+    elif gde in [18, 21, 24]:
+        gdej = 4
+    elif gde in [17, 20, 23]:
+        gdej = 5
+    elif gde in [16, 19, 22]:
+        gdej = 6
+    else:
+        gdej = 7
     lista[gdei][gdej] = boja
     return lista
 
