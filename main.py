@@ -26,7 +26,7 @@ def Pravila():
     print()
 
 def pozicija_u_koordinatu(koje, gde):       #dobijemo brojeve do 1 do 24 koji pion gde pomeramo
-    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
+    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
     koji_pion = koordinate[koje-1]
     gde_pomeramo = koordinate[gde - 1]
     return koji_pion + " ---> " + gde_pomeramo
@@ -57,13 +57,50 @@ def nova_lista(stara_lista, koja_pozicija, gde):        #pretpostavlja se da je 
     for i in range(len(stara_lista)):
         for j in range(len(stara_lista[i])):
             lista[i].append(stara_lista[i][j])
-    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
-    koja_po_redu_koja = pozicije.index(koja_pozicija)
-    koja_po_redu_gde = pozicije.index(gde)
-    gdei = koja_po_redu_gde//8
-    gdej = koja_po_redu_gde%8
-    kojai = koja_po_redu_koja//8
-    kojaj = koja_po_redu_koja%8
+    if gde in [1, 2, 3, 15, 24, 23, 22, 10]:
+        gdei = 0
+    elif gde in [4, 5, 6, 14, 21, 20, 19, 11]:
+        gdei = 1
+    else:
+        gdei = 2
+    if gde in [1, 4, 7]:
+        gdej = 0
+    elif gde in [2, 5, 8]:
+        gdej = 1
+    elif gde in [3, 6, 9]:
+        gdej = 2
+    elif gde in [13, 14, 15]:
+        gdej = 3
+    elif gde in [18, 21, 24]:
+        gdej = 4
+    elif gde in [17, 20, 23]:
+        gdej = 5
+    elif gde in [16, 19, 22]:
+        gdej = 6
+    else:
+        gdej = 7
+    if koja_pozicija in [1, 2, 3, 15, 24, 23, 22, 10]:
+        kojai = 0
+    elif koja_pozicija in [4, 5, 6, 14, 21, 20, 19, 11]:
+        kojai = 1
+    else:
+        kojai = 2
+    if koja_pozicija in [1, 4, 7]:
+        kojaj = 0
+    elif koja_pozicija in [2, 5, 8]:
+        kojaj = 1
+    elif koja_pozicija in [3, 6, 9]:
+        kojaj = 2
+    elif koja_pozicija in [13, 14, 15]:
+        kojaj = 3
+    elif koja_pozicija in [18, 21, 24]:
+        kojaj = 4
+    elif koja_pozicija in [17, 20, 23]:
+        kojaj = 5
+    elif koja_pozicija in [16, 19, 22]:
+        kojaj = 6
+    else:
+        kojaj = 7
     lista[kojai][kojaj], lista[gdei][gdej] = lista[gdei][gdej], lista[kojai][kojaj]
     return lista
 
@@ -95,6 +132,36 @@ def nova_lista_faza1(stara_lista, boja, gde):
     else:
         gdej = 7
     lista[gdei][gdej] = boja
+    return lista
+
+def nova_lista_uklanjanje(stara_lista, gde):
+    lista = [[], [], []]
+    for i in range(3):
+        for j in range(8):
+            lista[i].append(stara_lista[i][j])
+    if gde in [1, 2, 3, 15, 24, 23, 22, 10]:
+        gdei = 0
+    elif gde in [4, 5, 6, 14, 21, 20, 19, 11]:
+        gdei = 1
+    else:
+        gdei = 2
+    if gde in [1, 4, 7]:
+        gdej = 0
+    elif gde in [2, 5, 8]:
+        gdej = 1
+    elif gde in [3, 6, 9]:
+        gdej = 2
+    elif gde in [13, 14, 15]:
+        gdej = 3
+    elif gde in [18, 21, 24]:
+        gdej = 4
+    elif gde in [17, 20, 23]:
+        gdej = 5
+    elif gde in [16, 19, 22]:
+        gdej = 6
+    else:
+        gdej = 7
+    lista[gdei][gdej] = "x"
     return lista
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from mice.tabla import Tabla
+
 def heuristika(cvor, faza, boja, gde=0):
     from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1
     if cvor._vrednost == []:
@@ -7,11 +9,22 @@ def heuristika(cvor, faza, boja, gde=0):
     else:
         boja2 = "■"
     if faza == 1:
-        stanje_table =  novi_mlin(cvor, boja)*20 + (broj_mlinova(cvor, boja) - broj_mlinova(cvor, boja2))*15 + broj_blokiranih_figura(cvor, boja)*10 + (broj_piona(cvor, boja) - broj_piona(cvor, boja2))*5 + (broj_dvojki(cvor, boja)-broj_dvojki(cvor, boja2))*25 + (broj_trojki(cvor, boja)-broj_trojki(cvor, boja2))*30
-        vrednost_pozicije = pozicija(gde)
-        return stanje_table + vrednost_pozicije*2
+        blokirane = broj_blokiranih_figura(cvor, boja)
+        pioni = broj_piona(cvor, boja)
+        dvojke = broj_dvojki(cvor, boja)-broj_dvojki(cvor, boja2)
+        trojke = broj_trojki(cvor, boja)-broj_trojki(cvor, boja2)
+        mobilnost = mobilnost_piona(cvor, boja) - mobilnost_piona(cvor, boja2)
+        # vrednost_pozicije = pozicija(gde)
+        stanje_table = blokirane*20 + pioni*5 + mobilnost*10 - broj_mlinova(cvor, boja2)*3 + dvojke*25# +novi_mlinovi*20 + broj_mlinova_na_tabli*15 + trojke*30
+        return stanje_table
     else:
-        return novi_mlin(cvor, boja)*30 + broj_mlinova(cvor, boja)*15 + broj_blokiranih_figura(cvor, boja)*15 + broj_piona(cvor, boja)*5 + nova_prilika_za_mlin(cvor, boja)*25 + dupli_mlin(cvor, boja)*40 + pobednicka_konfiguracija(cvor, boja)
+        novi_mlinovi = novi_mlin(cvor, boja) 
+        broj_mlinova_na_tabli = broj_mlinova(cvor, boja) - broj_mlinova(cvor, boja2)
+        blokirane = broj_blokiranih_figura(cvor, boja)
+        pioni = broj_piona(cvor, boja)
+        dvojke = broj_dvojki(cvor, boja)-broj_dvojki(cvor, boja2)
+        trojke = broj_trojki(cvor, boja)-broj_trojki(cvor, boja2)
+        return novi_mlinovi*30 + broj_mlinova_na_tabli*15 + blokirane*15 + pioni*5 + nova_prilika_za_mlin(cvor, boja)*25 + dupli_mlin(cvor, boja)*40 + pobednicka_konfiguracija(cvor, boja)
 
 def pozicija(gde):
     if gde in [5, 11, 14, 20]:
@@ -20,6 +33,10 @@ def pozicija(gde):
         return 15
     else:
         return 30
+
+def mobilnost_piona(cvor, boja):
+    mobilnost = len(Tabla(cvor._vrednost, 1, boja).validni_potezi_faza1(boja, "broj"))
+    return mobilnost
 
 def paralelni_mlinovi(cvor, boja):
     paralelni = 0
@@ -32,18 +49,23 @@ def paralelni_mlinovi(cvor, boja):
             boja2 = "▢"
         else:
             boja2 = "■"
-        if cvor._vrednost[1][j]=="x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja:
+        if cvor._vrednost[1][j]=="x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[0][j]==boja:
             paralelni += 1
-        elif cvor._vrednost[1][j]=="x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja2:
+        elif cvor._vrednost[1][j]=="x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[0][j]==boja2:
             paralelni -= 1
-        elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja:
+        elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[1][j]==boja:
             paralelni += 1
-        elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja2:
+        elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][sledece]==cvor._vrednost[0][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[1][j]==boja2:
             paralelni -= 1
-        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja:
+        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[2][j]==boja:
             paralelni += 1
-        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja2:
+        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[2][j]==boja2:
             paralelni -= 1
+        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[1][j]==boja:
+            paralelni += 1
+        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][sledece]==cvor._vrednost[2][j-1]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==cvor._vrednost[1][j]==boja2:
+            paralelni -= 1
+    return paralelni
 
 def novi_mlin(cvor, boja):     #vraca brojcanu vrednost koja je broj mlinova napravljenih u ovom potezu
     return broj_mlinova(cvor, boja) - broj_mlinova(cvor._roditelj, boja)
@@ -118,11 +140,9 @@ def broj_piona(cvor, boja):            #vraca broj piona minus broj piona suparn
     return pioni
 
 def broj_dvojki(cvor, boja):           #vraca broj dvojki koje postoje na tabli za jednu boju
-    pozicija=0
     broj_dvojki = 0
-    for i in range(len(cvor._vrednost)):
-        for j in range(1, len(cvor._vrednost[i]), 2):
-            pozicija+=2
+    for i in range(3):
+        for j in range(1, 8, 2):
             sledece = j + 1
             prethodno = j - 1
             if j == 7:
@@ -132,25 +152,16 @@ def broj_dvojki(cvor, boja):           #vraca broj dvojki koje postoje na tabli 
                     broj_dvojki += 1
                 elif cvor._vrednost[i][prethodno] == boja and cvor._vrednost[i][sledece] == "x":
                     broj_dvojki += 1
-                if i in [0, 2]:
-                    if cvor._vrednost[1][j] == "x" and cvor._vrednost[abs(i - 2)][j] == boja:
-                        broj_dvojki += 1
-                    elif cvor._vrednost[1][j] == boja and cvor._vrednost[abs(i - 2)][j] == "x":
-                        broj_dvojki += 1
-                elif i==1:
-                    if cvor._vrednost[0][j] == "x" and cvor._vrednost[2][j] == boja:
-                        broj_dvojki += 1
-                    elif cvor._vrednost[0][j] == boja and cvor._vrednost[2][j] == "x":
-                        broj_dvojki += 1
             elif cvor._vrednost[i][j] == "x":
                 if cvor._vrednost[i][prethodno] == boja and cvor._vrednost[i][sledece] == boja:
                     broj_dvojki += 1
-                if i in [0, 2]:
-                    if cvor._vrednost[1][j] == boja and cvor._vrednost[abs(i - 2)][j] == boja:
-                        broj_dvojki += 1
-                elif i==1:
-                    if cvor._vrednost[0][j] == boja and cvor._vrednost[2][j] == boja:
-                        broj_dvojki += 1
+    for j in range(1, 8, 2):
+        if cvor._vrednost[1][j] == "x" and cvor._vrednost[0][j] == cvor._vrednost[2][j] == boja:
+                broj_dvojki += 1
+        elif cvor._vrednost[0][j] == "x" and cvor._vrednost[1][j] == cvor._vrednost[2][j] == boja:
+                broj_dvojki += 1
+        elif cvor._vrednost[2][j] == "x" and cvor._vrednost[1][j] == cvor._vrednost[0][j] == boja:
+                broj_dvojki += 1
     return broj_dvojki
 
 def broj_trojki(cvor, boja):           #vraca broj trojki koje postoje na tabli za jednu boju, važi za prvu fazu
@@ -162,8 +173,8 @@ def nova_prilika_za_mlin(cvor, boja):       #funkcija vraca broj novih prilika z
         boja2 = "▢"
     else:
         boja2 = "■"
-    k = cvor.broj_dvojki(cvor, boja) - cvor._roditelj.broj_dvojki(cvor, boja)
-    l = cvor.broj_dvojki(cvor, boja2) - cvor._roditelj.broj_dvojki(cvor, boja2)
+    k = broj_dvojki(cvor, boja) - broj_dvojki(cvor._roditelj, boja)
+    l = broj_dvojki(cvor, boja2) - broj_dvojki(cvor._roditelj, boja2)
     return k - l
     
 def dupli_mlin(cvor, boja):        #vraca razliku nasih i protivnikovih mlinova
@@ -181,7 +192,9 @@ def dupli_mlin(cvor, boja):        #vraca razliku nasih i protivnikovih mlinova
             if j == 0:
                 prethodno = 7
                 prethodno2 = 6
-            if cvor._vrednost[i][j] == "x":
+            elif j == 6:
+                sledece2 = 0
+            if cvor._vrednost[i][j] == "x":         #proveravamo da li ima "L bez coska"
                 if cvor._vrednost[i][prethodno]==cvor._vrednost[i][prethodno2]==cvor._vrednost[i][sledece]==cvor._vrednost[i][sledece2]==boja:
                     broj_duplih += 1
                 elif cvor._vrednost[i][prethodno]==cvor._vrednost[i][prethodno2]==cvor._vrednost[i][sledece]==cvor._vrednost[i][sledece2]==boja2:
@@ -192,11 +205,11 @@ def dupli_mlin(cvor, boja):        #vraca razliku nasih i protivnikovih mlinova
         else:
             sledece = j + 1
         if cvor._vrednost[1][j]=="x" and cvor._vrednost[0][j]==cvor._vrednost[2][j]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja:
-            broj_duplih += 1
+            broj_duplih += 1        #"+" bez sredine
         elif cvor._vrednost[1][j]=="x" and cvor._vrednost[0][j]==cvor._vrednost[2][j]==cvor._vrednost[1][sledece]==cvor._vrednost[1][j-1]==boja2:
             broj_duplih -= 1
         elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][j-1]==cvor._vrednost[0][sledece]==cvor._vrednost[1][j]==cvor._vrednost[2][j]==boja:
-            broj_duplih += 1
+            broj_duplih += 1        #"T bez preseka"
         elif cvor._vrednost[0][j] == "x" and cvor._vrednost[0][j-1]==cvor._vrednost[0][sledece]==cvor._vrednost[1][j]==cvor._vrednost[2][j]==boja2:
             broj_duplih -= 1
         elif cvor._vrednost[2][j] == "x" and cvor._vrednost[2][j-1]==cvor._vrednost[2][sledece]==cvor._vrednost[1][j]==cvor._vrednost[0][j]==boja:
@@ -210,9 +223,9 @@ def pobednicka_konfiguracija(cvor, boja):      #vraca 1000 za pobednicku konfig,
         boja2 = "▢"
     else:
         boja2 = "■"
-    if len(cvor.validni_potezi_faza2(boja2, "broj")) == 0 or broj_piona(cvor, boja2) == 2:
+    if len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja2, "broj")) == 0 or broj_piona(cvor, boja2) == 2:
         return 1000
-    elif len(cvor.validni_potezi_faza2(boja, "broj")) == 0 or broj_piona(cvor, boja) == 2:
+    elif len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja, "broj")) == 0 or broj_piona(cvor, boja) == 2:
         return -1000
     else:
         return 0
