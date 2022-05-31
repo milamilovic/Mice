@@ -1,4 +1,4 @@
-from mice.heuristika import heuristika, pozicija, pobednicka_konfiguracija, broj_mlinova
+from mice.heuristika import heuristika, pozicija, pobednicka_konfiguracija, novi_mlin
 from mice.tabla import Tabla
 from copy import deepcopy
 from time import time
@@ -221,7 +221,9 @@ class Igra(object):
                                 break
                     pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
                     gde = pozicije[trazena]
-                    if broj_mlinova(cvor_stabla, drugi_igrac) != broj_mlinova(CvorStabla(tabla_roditelja), drugi_igrac):
+                    pomocni_cvoric = CvorStabla(tabla_roditelja)
+                    pomocni_cvoric._roditelj = cvor_stabla
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                         vrednost = self.uklanjanje_piona(Tabla(tabla_trenutna, 1, igrac), 1, igrac, hash_map, broj_postavljenih + 1)[1]
                         hash_map[tabla[0]._izgled] = vrednost, [Tabla([], 1, igrac), 0], proteklo_vreme
                         naj_potez = [Tabla([], 1, igrac), 0]
@@ -263,7 +265,9 @@ class Igra(object):
                         hash_map['3'] = 2
                 except:
                     start = time()
-                    if broj_mlinova(cvor_stabla, drugi_igrac) == broj_mlinova(CvorStabla(potez[0]._izgled), drugi_igrac):
+                    pomocni_cvoric = CvorStabla(potez[0]._izgled)
+                    pomocni_cvoric._roditelj = cvor_stabla
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez[0], rendomvremekojeminetreba
                         proteklo_vreme += time() - start
@@ -316,7 +320,9 @@ class Igra(object):
                     nova_vrednost, naj_potez, vreme = hash_map[potez[0]]
                 except:
                     start = time()
-                    if broj_mlinova(cvor_stabla, drugi_igrac) == broj_mlinova(CvorStabla(potez[0]._izgled), drugi_igrac):
+                    pomocni_cvoric = CvorStabla(potez[0]._izgled)
+                    pomocni_cvoric._roditelj = cvor_stabla
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez[0], rendomvremekojeminetreba
                         proteklo_vreme += time() - start
@@ -345,7 +351,9 @@ class Igra(object):
                 vrednost, naj_potez, rendom = hash_map[tabla[0]]
             except:
                 tabla_roditelja = cvor_stabla._roditelj._vrednost
-                if broj_mlinova(cvor_stabla, drugi_igrac) != broj_mlinova(CvorStabla(tabla_roditelja), drugi_igrac):
+                pomocni_cvoric = CvorStabla(tabla_roditelja)
+                pomocni_cvoric._roditelj = cvor_stabla
+                if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                     vrednost = self.uklanjanje_piona(Tabla(cvor_stabla._vrednost, 2, igrac), 2, igrac, hash_map)[1]
                     hash_map[tabla._izgled] = vrednost, Tabla([], 2, igrac), proteklo_vreme
                 else:
@@ -385,7 +393,9 @@ class Igra(object):
                         hash_map['3'] = 2
                 except:
                     start = time()
-                    if broj_mlinova(cvor_stabla, drugi_igrac) == broj_mlinova(CvorStabla(potez._izgled), drugi_igrac):
+                    pomocni_cvoric = CvorStabla(potez._izgled)
+                    pomocni_cvoric._roditelj = cvor_stabla
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         proteklo_vreme += time() - start
                     else:
@@ -437,7 +447,9 @@ class Igra(object):
                     nova_vrednost, naj_potez, vreme = hash_map[potez]
                 except:
                     start = time()
-                    if broj_mlinova(cvor_stabla, drugi_igrac) == broj_mlinova(CvorStabla(potez._izgled), drugi_igrac):
+                    pomocni_cvoric = CvorStabla(potez._izgled)
+                    pomocni_cvoric._roditelj = cvor_stabla
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         proteklo_vreme += time() - start
                     else:
@@ -464,7 +476,9 @@ class Igra(object):
             print("Kompjuter je na potezu!")
             print()
             potez = self.kompjuter_potez_faza1(stablo, hesmapa, i)
-            if broj_mlinova(CvorStabla(self._trenutno_stanje._izgled), self._na_potezu) < broj_mlinova(CvorStabla(potez._izgled), self._na_potezu):
+            pomocni_cvoric = CvorStabla(potez._izgled)
+            pomocni_cvoric._roditelj = stablo._trenutni
+            if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                 potez = self.uklanjanje_piona(potez, 1, self._na_potezu, hesmapa, i)[0]
                 cvor = CvorStabla(potez._izgled)
                 stablo._trenutni._dodaj_dete_(cvor)
@@ -501,7 +515,9 @@ class Igra(object):
                     pass
             gde = main.koordinata_u_poziciju_faza1(potezi[potez-1])
             novo_stanje = Tabla(main.nova_lista_faza1(self._trenutno_stanje._izgled, "■", gde), 1, self._na_potezu)
-            if broj_mlinova(CvorStabla(self._trenutno_stanje._izgled), self._na_potezu) < broj_mlinova(CvorStabla(novo_stanje._izgled), self._na_potezu):
+            pomocni_cvoric = CvorStabla(novo_stanje._izgled)
+            pomocni_cvoric._roditelj = stablo._trenutni
+            if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                 potezi = self._trenutno_stanje.validno_uklanjanje_piona("■", 1,"potezi_koordinate")
                 print("Mogući potezi su: ")
                 for i in range(1, len(potezi)+1):
@@ -541,7 +557,9 @@ class Igra(object):
                 print("Kompjuter je na potezu!")
                 print()
                 potez = self.kompjuter_potez(stablo, hesmapa)
-                if broj_mlinova(CvorStabla(self._trenutno_stanje._izgled), self._na_potezu) < broj_mlinova(CvorStabla(potez._izgled), self._na_potezu):
+                pomocni_cvoric = CvorStabla(potez._izgled)
+                pomocni_cvoric._roditelj = stablo._trenutni
+                if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                     potez = self.uklanjanje_piona(potez, 2, self._na_potezu, hesmapa, i)[0]
                     cvor = CvorStabla(potez._izgled)
                     stablo._trenutni._dodaj_dete_(cvor)
@@ -579,7 +597,9 @@ class Igra(object):
                         pass
                 koji, gde = main.koordinata_u_poziciju(potezi[potez-1])
                 novo_stanje = Tabla(main.nova_lista(self._trenutno_stanje._izgled, koji, gde), 2, self._na_potezu)
-                if broj_mlinova(CvorStabla(self._trenutno_stanje._izgled), self._na_potezu) < broj_mlinova(CvorStabla(novo_stanje._izgled), self._na_potezu):
+                pomocni_cvoric = CvorStabla(novo_stanje._izgled)
+                pomocni_cvoric._roditelj = stablo._trenutni
+                if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                     potezi = self._trenutno_stanje.validno_uklanjanje_piona("■", 2,"potezi_koordinate")
                     print("Mogući potezi su: ")
                     for i in range(1, len(potezi)+1):
@@ -598,7 +618,7 @@ class Igra(object):
                     if stablo._trenutni._deca == []:
                         potezi = novo_stanje.validni_potezi_faza2("▢", "broj")
                         for stanje in potezi:
-                            stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
+                            stablo._trenutni._dodaj_dete_(CvorStabla(stanje._izgled))
                 self._trenutno_stanje = novo_stanje
                 for dete in stablo._trenutni._deca:
                     if dete._vrednost == novo_stanje._izgled:

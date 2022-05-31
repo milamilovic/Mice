@@ -68,7 +68,32 @@ def paralelni_mlinovi(cvor, boja):
     return paralelni
 
 def novi_mlin(cvor, boja):     #vraca brojcanu vrednost koja je broj mlinova napravljenih u ovom potezu
-    return broj_mlinova(cvor, boja) - broj_mlinova(cvor._roditelj, boja)
+    if cvor._vrednost == [["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"]]:
+        return 0
+    k = broj_mlinova(cvor, boja) - broj_mlinova(cvor._roditelj, boja)
+    if k > 0:
+        return k
+    else:
+        broj_novih_mlinova = 0
+        for i in range(3):
+            for j in range(1, 8, 2):
+                k=j-1
+                l=j+1
+                if j==7:
+                    l=0
+                if cvor._vrednost[i][j] == cvor._vrednost[i][k] == cvor._vrednost[i][l] == boja:
+                    if cvor._roditelj._vrednost[i][j] == cvor._roditelj._vrednost[i][k] == cvor._roditelj._vrednost[i][l] == boja:
+                        pass
+                    else:
+                        broj_novih_mlinova += 1
+        for j in range(1, 8, 2):
+            if cvor._vrednost[0][j] == cvor._vrednost[1][j] == cvor._vrednost[2][j] == boja:
+                if cvor._vrednost[0][j] == cvor._vrednost[1][j] == cvor._vrednost[2][j] == boja:
+                    pass
+                else:
+                    broj_novih_mlinova +=1
+        return broj_novih_mlinova
+
 
 def broj_mlinova(cvor, boja):          #vraca broj nasih mlinova minus broj mlinova suparnika
     broj_mlinova = 0
