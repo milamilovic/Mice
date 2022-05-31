@@ -164,6 +164,18 @@ def nova_lista_uklanjanje(stara_lista, gde):
     lista[gdei][gdej] = "x"
     return lista
 
+def pozicija_u_koordinatu_uklanjanje(koji):
+    koordinate = ["A1", "A4", "A7", "B2", "B4", "B6", "C3", "C4", "C5", "D1", "D2", "D3", "D5", "D6", "D7", "E3", "E4", "E5", "F2", "F4", "F6", "G1", "G4", "G7"]
+    koji_uklanjamo = koordinate[koji-1]
+    return "Ukloniti pion sa koordinate " + koji_uklanjamo
+
+def koordinata_u_poziciju_uklanjanje(potez):
+    koji_pion = potez[-2:]
+    pozicije = [1, 2, 3, 15, 24, 23, 22, 10, 4, 5, 6, 14, 21, 20, 19, 11, 7, 8, 9, 13, 18, 17, 16, 12]
+    koordinate = ["A1", "A4", "A7", "D7", "G7", "G4", "G1", "D1", "B2", "B4", "B6", "D6", "F6", "F4", "F2", "D2", "C3", "C4", "C5", "D5", "E5", "E4", "E3", "D3"]
+    koji = pozicije[koordinate.index(koji_pion)]
+    return koji
+
 if __name__ == "__main__":
     Pravila()
     i = mice.igra.Igra()

@@ -1,7 +1,7 @@
 from mice.ispisTable import *
 from mice.heuristika import *
 import main
-from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1, pozicija_u_koordinatu_faza1, nova_lista_uklanjanje
+from main import pozicija_u_koordinatu, koordinata_u_poziciju, koordinata_u_poziciju_faza1, nova_lista, nova_lista_faza1, pozicija_u_koordinatu_faza1, nova_lista_uklanjanje, pozicija_u_koordinatu_uklanjanje
 
 class Tabla(object):
     def __init__(self, lista, faza, boja):
@@ -142,7 +142,7 @@ class Tabla(object):
                                 potezi.append(Tabla(lista, 2, self._boja))
                             elif potreba == "potezi_koordinate":
                                 koordinate.append(pozicija_u_koordinatu(pozicijice[pozicija - 1], pozicijice[pozicija - 9]))
-                        elif self.izgled[2][j] == "x":
+                        if self.izgled[2][j] == "x":
                             if potreba == "broj":
                                 lista = nova_lista(self._izgled, pozicijice[pozicija - 1], pozicijice[pozicija + 7])
                                 potezi.append(Tabla(lista, 2, self._boja))
@@ -164,8 +164,9 @@ class Tabla(object):
         else:
             return False
 
-    def validno_uklanjanje_piona(self, faza, boja):
+    def validno_uklanjanje_piona(self, boja, faza, svrha):
         potezi = []
+        koordinate = []
         if boja == "■":
             boja2 = "▢"
         else:
@@ -176,7 +177,14 @@ class Tabla(object):
             for j in range(8):
                 pozicija += 1
                 if self._izgled[i][j] == boja2:
-                    potez = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[pozicija - 1]), faza, boja)
-                    potezi.append(potez)
-        return potezi
+                    if svrha == "broj":
+                        potez = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[pozicija - 1]), faza, boja)
+                        potezi.append(potez)
+                    else:
+                        koordinate.append(pozicija_u_koordinatu_uklanjanje(pozicije[pozicija - 1]))
+        if svrha == "broj":    
+            return potezi
+        else:
+            return koordinate
+
 
