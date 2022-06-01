@@ -164,6 +164,14 @@ def broj_piona(cvor, boja):            #vraca broj piona minus broj piona suparn
                 pioni -= 1
     return pioni
 
+def broj_piona1(cvor, boja):
+    pioni = 0
+    for i in range(3):
+        for j in range(8):
+            if cvor._vrednost[i][j] == boja:
+                pioni += 1
+    return pioni
+
 def broj_dvojki(cvor, boja):           #vraca broj dvojki koje postoje na tabli za jednu boju
     broj_dvojki = 0
     for i in range(3):
@@ -189,7 +197,7 @@ def broj_dvojki(cvor, boja):           #vraca broj dvojki koje postoje na tabli 
                 broj_dvojki += 1
     return broj_dvojki
 
-def broj_trojki(cvor, boja):           #vraca broj trojki koje postoje na tabli za jednu boju, važi za prvu fazu
+def broj_trojki(cvor, boja):           #vraca broj trojki koje postoje na tabli za jednu boju, vazi za prvu fazu
     dva = broj_dvojki(cvor, boja)
     return ( dva * (dva - 1) ) / 2
 
@@ -248,9 +256,9 @@ def pobednicka_konfiguracija(cvor, boja):      #vraca 1000 za pobednicku konfig,
         boja2 = "▢"
     else:
         boja2 = "■"
-    if len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja2, "broj")) == 0 or broj_piona(cvor, boja2) == 2:
+    if len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja2, "broj")) == 0 or broj_piona1(cvor, boja2) == 2:
         return 1000
-    elif len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja, "broj")) == 0 or broj_piona(cvor, boja) == 2:
+    elif len(Tabla(cvor._vrednost, 2, boja).validni_potezi_faza2(boja, "broj")) == 0 or broj_piona1(cvor, boja) == 2:
         return -1000
     else:
         return 0

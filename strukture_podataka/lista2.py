@@ -65,7 +65,7 @@ class Dvostruka(object):
         elif indeks == self._duzina-1:
             return self._tail
         elif indeks>=self._duzina:
-            print("Prekoračena je dužina liste!")
+            print("Prekoracena je duzina liste!")
         else:
             cvor = self._head
             while indeks != 1:

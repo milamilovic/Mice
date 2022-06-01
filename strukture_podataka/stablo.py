@@ -123,7 +123,7 @@ if __name__ == "__main__":
     t = Stablo()
     t._root = CvorStabla(0)
 
-    # kreiranje relacija između novih čvorova
+    # kreiranje relacija izmedju novih cvorova
     a = CvorStabla(1)
     b = CvorStabla(2)
     c = CvorStabla(3)
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     # visina stabla
     print('Visina = %d' % t.visina())
 
-    # dubina čvora
+    # dubina cvora
     print('Dubina(a) = %d' % t.dubina(a))
 
     # obilazak po dubini - preorder
@@ -146,6 +146,6 @@ if __name__ == "__main__":
     print('POSTORDER')
     t.postorder(t._root)
 
-    # obilazak po širini
+    # obilazak po cirini
     print('BREADTH FIRST')
     t.breadth_first()

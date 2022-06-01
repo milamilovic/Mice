@@ -33,7 +33,7 @@ class Mapa(object):
         for element in self._data:
             if element._kljuc == trazeni_kljuc:
                 return element._vrednost
-        print("Ne postoji element sa ključem " + str(trazeni_kljuc))
+        print("Ne postoji element sa kljucem " + str(trazeni_kljuc))
     def __setitem__(self, trazeni_kljuc, nova_vrednost):
         for element in self._data:
             if element._kljuc == trazeni_kljuc:
@@ -45,7 +45,7 @@ class Mapa(object):
             if self._data[i]._kljuc == trazeni_kljuc:
                 self._data.pop(i)
                 return
-        print("Ne postoji element sa ključem " + str(trazeni_kljuc))
+        print("Ne postoji element sa kljucem " + str(trazeni_kljuc))
     def items(self):
         for element in self._data:
             yield element._kljuc, element._vrednost

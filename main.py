@@ -1,4 +1,4 @@
-#Autor: Mila Milović SV22-2021
+#Autor: Mila Milovic SV22-2021
 #Projekat iz predmeta Algoritmi i strukture podataka
 #Program za igru mice (Nine Men's Morris)
 
@@ -14,12 +14,12 @@ def Pravila():
     print()
     print("-------------------------------------------------------------------------------------------------------------------------")
     print()
-    print("Dobrodošli u igru mice!")
+    print("Dobrodosli u igru mice!")
     print()
-    print("Kada je vaš red da igrate biće ispisani svi mogući potezi u formatu 'n. polje1 ---> polje2'")
-    print("Treba da upišete redni broj poteza koji želite da odigrate (n)")
+    print("Kada je vas red da igrate bice ispisani svi moguci potezi u formatu 'n. polje1 ---> polje2'")
+    print("Treba da upisete redni broj poteza koji zelite da odigrate (n)")
     print("'polje1' predstavlja polje sa pionom koji se pomera, a 'polje2' polje na koje se taj pion pomera")
-    print("Vi ste crni igrač. Srećno!")
+    print("Vi ste crni igrac. Srecno!")
     print()
     print("-------------------------------------------------------------------------------------------------------------------------")
     print()
@@ -185,14 +185,4 @@ if __name__ == "__main__":
     boja = "▢"
     pocetak = input("Pritisnite bilo koji taster za pocetak igre: ")
     i.igraj(stablo, hash_map)
-    # boja="55555"
-    # while boja not in ["1", "2"]:
-    #     if boja != "55555":
-    #         print("Niste uneli validnu opciju! Pokušajte ponovo!")
-    #     print("Unesite broj 1 ako želite da igrate kao beli igrač, a 2 ako želite da igrate kao crni:")
-    #     boja = input(">>")
-    # if boja == "1":
-    #     boja, boja2 = "▢", "■"
-    # else:
-    #      boja, boja2 = "■", "▢"
 

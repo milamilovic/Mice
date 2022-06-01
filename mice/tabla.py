@@ -61,7 +61,7 @@ class Tabla(object):
         elif vrednost<=self._deca[-1]:
             self._deca.append(vrednost)
         else:
-            for i in range(len(self._deca)):                   #sortirana deca, od najveće vrednosti do najmanje
+            for i in range(len(self._deca)):                   #sortirana deca, od najvece vrednosti do najmanje
                 if self._deca[i]._vrednost <= vrednost._vrednost:
                     self._deca.insert(i+1, vrednost)
     def _ukloni_dete_(self, vrednost):
@@ -180,24 +180,7 @@ class Tabla(object):
                 else:
                     sledece = j + 1
                 if self._izgled[i][j-1] == self._izgled[i][j] == self._izgled[i][sledece] == boja2:
-                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+j-1]), faza, boja)
-                    if pomocna_tabla in potezi:
-                        potezi.remove(pomocna_tabla)
-                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+j]), faza, boja)
-                    if pomocna_tabla in potezi:
-                        potezi.remove(pomocna_tabla)
-                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+sledece]), faza, boja)
-                    if pomocna_tabla in potezi:
-                        potezi.remove(pomocna_tabla)
-                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j-1])
-                    if pomocna_koordinata in koordinate:
-                        koordinate.remove(pomocna_koordinata)
-                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j])
-                    if pomocna_koordinata in koordinate:
-                        koordinate.remove(pomocna_koordinata)
-                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+sledece])
-                    if pomocna_koordinata in koordinate:
-                        koordinate.remove(pomocna_koordinata)
+                    pass
                 else:
                     if self._izgled[i][j-1] == boja2:
                         if svrha == "broj":
@@ -211,32 +194,9 @@ class Tabla(object):
                             potezi.append(potez)
                         else:
                             koordinate.append(pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j]))
-                    # if self._izgled[i][sledece] == boja2:
-                    #     if svrha == "broj":
-                    #         potez = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+j+1]), faza, boja)
-                    #         potezi.append(potez)
-                    #     else:
-                    #         koordinate.append(pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j+1]))
         for j in range(1, 8, 2):
             if self._izgled[0][j] == self._izgled[1][j] == self._izgled[2][j] == boja2:
-                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[j]), faza, boja)
-                if pomocna_tabla in potezi:
-                    potezi.remove(pomocna_tabla)
-                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[8+j]), faza, boja)
-                if pomocna_tabla in potezi:
-                    potezi.remove(pomocna_tabla)
-                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[16+j]), faza, boja)
-                if pomocna_tabla in potezi:
-                    potezi.remove(pomocna_tabla)
-                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[j])
-                if pomocna_koordinata in koordinate:
-                    koordinate.remove(pomocna_koordinata)
-                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[8+j])
-                if pomocna_koordinata in koordinate:
-                    koordinate.remove(pomocna_koordinata)
-                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[16+j])
-                if pomocna_koordinata in koordinate:
-                    koordinate.remove(pomocna_koordinata)
+                pass
             else:
                 if self._izgled[0][j] == boja2:
                     if svrha == "broj":
@@ -265,6 +225,51 @@ class Tabla(object):
                         pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[16+j])
                         if pomocna_koordinata not in koordinate:
                             koordinate.append(pomocna_koordinata)
+        for i in range(3):
+            for j in range(1, 8, 2):
+                if j == 7:
+                    sledece = 0
+                else:
+                    sledece = j + 1
+                if self._izgled[i][j-1] == self._izgled[i][j] == self._izgled[i][sledece] == boja2:
+                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+j-1]), faza, boja)
+                    if pomocna_tabla in potezi:
+                        potezi.remove(pomocna_tabla)
+                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+j]), faza, boja)
+                    if pomocna_tabla in potezi:
+                        potezi.remove(pomocna_tabla)
+                    pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[i*8+sledece]), faza, boja)
+                    if pomocna_tabla in potezi:
+                        potezi.remove(pomocna_tabla)
+                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j-1])
+                    if pomocna_koordinata in koordinate:
+                        koordinate.remove(pomocna_koordinata)
+                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+j])
+                    if pomocna_koordinata in koordinate:
+                        koordinate.remove(pomocna_koordinata)
+                    pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[i*8+sledece])
+                    if pomocna_koordinata in koordinate:
+                        koordinate.remove(pomocna_koordinata)
+        for j in range(1, 8, 2):
+            if self._izgled[0][j] == self._izgled[1][j] == self._izgled[2][j] == boja2:
+                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[j]), faza, boja)
+                if pomocna_tabla in potezi:
+                    potezi.remove(pomocna_tabla)
+                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[8+j]), faza, boja)
+                if pomocna_tabla in potezi:
+                    potezi.remove(pomocna_tabla)
+                pomocna_tabla = Tabla(nova_lista_uklanjanje(self._izgled, pozicije[16+j]), faza, boja)
+                if pomocna_tabla in potezi:
+                    potezi.remove(pomocna_tabla)
+                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[j])
+                if pomocna_koordinata in koordinate:
+                    koordinate.remove(pomocna_koordinata)
+                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[8+j])
+                if pomocna_koordinata in koordinate:
+                    koordinate.remove(pomocna_koordinata)
+                pomocna_koordinata = pozicija_u_koordinatu_uklanjanje(pozicije[16+j])
+                if pomocna_koordinata in koordinate:
+                    koordinate.remove(pomocna_koordinata)
         if potezi == [] and koordinate == []:
             pozicija = 0
             for i in range(3):

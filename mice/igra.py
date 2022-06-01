@@ -388,19 +388,19 @@ class Igra(object):
                         pass
                     stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
             self._na_potezu = "■"
-            print("Kompjuter je igrao! Stanje table je sledeće: ")
+            print("Kompjuter je igrao! Stanje table je sledece: ")
             print(self._trenutno_stanje)
             print()
             print("Vi ste na potezu!")
             print()
             potezi = self._trenutno_stanje.validni_potezi_faza1("■", "potezi_koordinate")
-            print("Mogući potezi su: ")
+            print("Moguci potezi su: ")
             for i in range(1, len(potezi)+1):
                 print(str(i) + ". " + potezi[i-1])
             potez=-3
             while potez not in range(1, len(potezi)+1):
                 try:
-                    potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                    potez = int(input("Unesite redni broj poteza koji zelite da odigrate: "))
                 except:
                     pass
             gde = main.koordinata_u_poziciju_faza1(potezi[potez-1])
@@ -408,23 +408,16 @@ class Igra(object):
             pomocni_cvoric = CvorStabla(novo_stanje._izgled)
             pomocni_cvoric._roditelj = stablo._trenutni
             self._trenutno_stanje = novo_stanje
-            for dete in stablo._trenutni._deca:
-                if dete._vrednost == novo_stanje._izgled:
-                    stablo._trenutni = dete
-                    if stablo._trenutni._deca == []:
-                        potezi = self._trenutno_stanje.validni_potezi_faza1(self._na_potezu, "broj")
-                        for stanje in potezi:
-                            stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
-                    break
+            stablo._trenutni = pomocni_cvoric
             if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                 potezi = self._trenutno_stanje.validno_uklanjanje_piona("■", 1,"potezi_koordinate")
-                print("Mogući potezi su: ")
+                print("Moguci potezi su: ")
                 for i in range(1, len(potezi)+1):
                     print(str(i) + ". " + potezi[i-1])
                 potez=-3
                 while potez not in range(1, len(potezi)+1):
                     try:
-                        potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                        potez = int(input("Unesite redni broj poteza koji zelite da odigrate: "))
                     except:
                         pass
                 gde = main.koordinata_u_poziciju_uklanjanje(potezi[potez-1])
@@ -448,7 +441,7 @@ class Igra(object):
                         for stanje in potezi:
                             stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
                     break
-            print("Odigrali ste Vaš potez! Stanje table je sledeće: ")
+            print("Odigrali ste Vas potez! Stanje table je sledece: ")
             print(self._trenutno_stanje)
         while pobednicka_konfiguracija(stablo._trenutni, self._na_potezu) != 1000 or pobednicka_konfiguracija(stablo._trenutni, self._na_potezu) != -1000:    #faza 2
             if self._na_potezu == "▢":
@@ -478,20 +471,20 @@ class Igra(object):
                     for stanje in potez.validni_potezi_faza2("■", "broj"):
                         stablo._trenutni._dodaj_dete_(CvorStabla(stanje._izgled))
                 self._na_potezu = "■"
-                print("Kompjuter je igrao! Stanje table je sledeće: ")
+                print("Kompjuter je igrao! Stanje table je sledece: ")
                 print(self._trenutno_stanje)
             else:
                 print()
                 print("Vi ste na potezu!")
                 print()
                 potezi = self._trenutno_stanje.validni_potezi_faza2("■", "potezi_koordinate")
-                print("Mogući potezi su: ")
+                print("Moguci potezi su: ")
                 for i in range(1, len(potezi)+1):
                     print(str(i) + ". " + potezi[i-1])
                 potez=-3
                 while potez not in range(1, len(potezi)+1):
                     try:
-                        potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                        potez = int(input("Unesite redni broj poteza koji zelite da odigrate: "))
                     except:
                         pass
                 koji, gde = main.koordinata_u_poziciju(potezi[potez-1])
@@ -500,18 +493,18 @@ class Igra(object):
                 pomocni_cvoric._roditelj = stablo._trenutni
                 if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                     potezi = self._trenutno_stanje.validno_uklanjanje_piona("■", 2,"potezi_koordinate")
-                    print("Mogući potezi su: ")
+                    print("Moguci potezi su: ")
                     for i in range(1, len(potezi)+1):
                         print(str(i) + ". " + potezi[i-1])
                     potez=-3
                     while potez not in range(1, len(potezi)+1):
                         try:
-                            potez = int(input("Unesite redni broj poteza koji želite da odigrate: "))
+                            potez = int(input("Unesite redni broj poteza koji zelite da odigrate: "))
                         except:
                             pass
                     gde = main.koordinata_u_poziciju_uklanjanje(potezi[potez-1])
-                    novo_stanje = Tabla(main.nova_lista_uklanjanje(self._trenutno_stanje._izgled, gde), 2, self._na_potezu)
-                    cvor = CvorStabla(novo_stanje.izgled)
+                    novo_stanje = Tabla(main.nova_lista_uklanjanje(novo_stanje._izgled, gde), 2, self._na_potezu)
+                    cvor = CvorStabla(novo_stanje._izgled)
                     stablo._trenutni._dodaj_dete_(cvor)
                     stablo._trenutni = cvor
                     if stablo._trenutni._deca == []:
@@ -527,14 +520,16 @@ class Igra(object):
                             for stanje in potezi:
                                 stablo._trenutni._dodaj_dete_(CvorStabla(stanje._izgled))
                         break
-                print("Odigrali ste Vaš potez! Stanje table je sledeće: ")
+                print("Odigrali ste Vas potez! Stanje table je sledece: ")
                 print(self._trenutno_stanje)
                 self._na_potezu = "▢"
-        if heuristika.pobednicka_konfiguracija(stablo._trenutni, 2) == 1000:
-            print()
-            print("Izgubili ste! Računar je pobedio!")
-            print()
-        elif heuristika.pobednicka_konfiguracija(stablo._trenutni, 2) == -1000:
-            print()
-            print("Pobedili ste!")
-            print()
+            if pobednicka_konfiguracija(stablo._trenutni, "■") == 1000:
+                print()
+                print("Pobedili ste!")
+                print()
+                exit()
+            elif pobednicka_konfiguracija(stablo._trenutni, "▢") == 1000:
+                print()
+                print("Izgubili ste! Racunar je pobedio!")
+                print()
+                exit()
