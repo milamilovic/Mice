@@ -60,116 +60,6 @@ class Igra(object):
                         najbolji_potez = [tabla, nova_vrednost]
         return najbolji_potez[0], najbolji_potez[1]
 
-    # def minimax_uklanjanje(self, tabla, faza, dubina, hash_map, cvor, proteklo_vreme, igrac, drugi_igrac, alfa = -10000000000, beta = 10000000000):
-    #     vreme = time()
-    #     if dubina == 0:       #bazni slucaj
-    #         vreme = time()
-    #         try:
-    #             vrednost = hash_map[tabla][0]
-    #         except:
-    #             vrednost = heuristika(cvor, faza, drugi_igrac)
-    #             hash_map[tabla._izgled] = vrednost, Tabla([], faza, igrac), proteklo_vreme
-    #             proteklo_vreme += time() - vreme
-    #             naj_potez = Tabla([], faza, igrac)
-    #         return vrednost, naj_potez, proteklo_vreme           #vraca vrednost, najbolji potez i vreme koje je proteklo do sad
-    #     if igrac == "▢":            #kompjuter, maximizer
-    #         vrednost = -10000000000
-    #         najbolji_potez = Tabla([], 2, igrac)
-    #         potezi = Tabla(cvor._vrednost, 2, igrac).validno_uklanjanje_piona(igrac, "broj")
-    #         for potez in potezi:
-    #             cvoric = CvorStabla(potez._izgled)
-    #             if cvoric not in cvor._deca:
-    #                 if cvoric._vrednost != cvor._vrednost:
-    #                     cvor._dodaj_dete_(cvoric)
-    #         for potez in potezi:
-    #             vrednosti_dece = []
-    #             if cvor._deca == []:
-    #                 for tabla in Tabla(cvor._vrednost, faza, self._na_potezu).validno_uklanjanje_piona(self._na_potezu, "broj"):
-    #                     cvor._dodaj_dete_(CvorStabla(tabla))
-    #             for dete in cvor._deca:
-    #                 vrednosti_dece.append(dete)
-    #             for detence in range(len(vrednosti_dece)):
-    #                 if potez._izgled == vrednosti_dece[detence]._vrednost:
-    #                     privremeni_cvor = vrednosti_dece[detence]
-    #                     break
-    #                 else:
-    #                     privremeni_cvor = CvorStabla(potez._izgled)
-    #                     if privremeni_cvor in cvor._deca:
-    #                         cvor._dodaj_dete_(privremeni_cvor)
-    #             try:
-    #                 nova_vrednost, naj_potez, vreme = hash_map[potez]
-    #                 if naj_potez == Tabla([], faza, igrac):
-    #                     hash_map['3'] = 2
-    #             except:
-    #                 start = time()
-    #                 try:
-    #                     x = cvor
-    #                 except:
-    #                     pass
-    #                 nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax_uklanjanje(potez, faza, dubina - 1, hash_map, privremeni_cvor, proteklo_vreme, drugi_igrac, igrac, alfa, beta)
-    #                 hash_map[tabla._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
-    #                 proteklo_vreme += time() - start
-    #             if nova_vrednost > vrednost:
-    #                 vrednost = nova_vrednost
-    #                 if vrednost > alfa:
-    #                     alfa = vrednost
-    #                 najbolji_potez = potez
-    #             # vrednost = max(vrednost, nova_vrednost)
-    #             # alfa = max(alfa, vrednost)
-    #             # if vrednost == nova_vrednost:
-    #             #     najbolji_potez = potez
-    #             if beta <= alfa:
-    #                 break
-    #             # if proteklo_vreme > 2.5:
-    #             #     break
-    #         if najbolji_potez._izgled == cvor._vrednost:
-    #             pass
-    #         if najbolji_potez._izgled == []:
-    #             pass
-    #         if najbolji_potez == Tabla([], 2, igrac):
-    #             najbolji_potez = Tabla(cvor._vrednost, 2, igrac).validno_uklanjanje_piona(igrac, "broj")[0]
-    #         return vrednost, najbolji_potez, proteklo_vreme
-    #     else:               #igrac, minimizer
-    #         vrednost = 10000000000
-    #         najbolji_potez = Tabla([], 2, igrac)
-    #         potezi = []
-    #         for potez in Tabla(cvor._vrednost, faza, igrac).validno_uklanjanje_piona(igrac, "broj"):
-    #             potezi.append(potez)
-    #             cvoric = CvorStabla(potez._izgled)
-    #             if cvoric not in cvor._deca:
-    #                 cvor._dodaj_dete_(cvoric)
-    #         for potez in potezi:
-    #             vrednosti_dece = []
-    #             for dete in cvor._deca:
-    #                 vrednosti_dece.append(dete)
-    #             for detence in range(len(vrednosti_dece)):
-    #                 if potez._izgled == vrednosti_dece[detence]._vrednost:
-    #                     privremeni_cvor = vrednosti_dece[detence]
-    #                     break
-    #                 else:
-    #                     privremeni_cvor = CvorStabla(potez._izgled)
-    #                     if privremeni_cvor in cvor._deca:
-    #                         cvor._dodaj_dete_(privremeni_cvor)
-    #             try:
-    #                 nova_vrednost, naj_potez, vreme = hash_map[potez]
-    #             except:
-    #                 start = time()
-    #                 nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax_uklanjanje(potez, faza, dubina - 1, hash_map, privremeni_cvor, proteklo_vreme, drugi_igrac, igrac, alfa, beta)
-    #                 hash_map[tabla._izgled] = nova_vrednost, naj_potez, rendomvremekojeminetreba
-    #                 proteklo_vreme += time() - start
-    #             if nova_vrednost < vrednost:
-    #                 vrednost = nova_vrednost
-    #                 if vrednost < beta:
-    #                     beta = vrednost
-    #                 najbolji_potez = potez
-    #             if beta <= alfa:
-    #                 break
-    #             # if proteklo_vreme > 2.5:
-    #             #     break
-    #         if najbolji_potez == Tabla([], faza, igrac):
-    #             najbolji_potez = Tabla(cvor._vrednost, 1, igrac).validno_uklanjanje_piona(igrac, "broj")[0]
-    #         return vrednost, najbolji_potez, proteklo_vreme
-
     def varijabilna_dubina(self, tabla, proteklo_vreme_od_pocetka_poteza):
         if tabla._faza == 1:
             moguci_potezi = len(tabla.validni_potezi_faza1(self._na_potezu, "broj"))
@@ -267,7 +157,7 @@ class Igra(object):
                     start = time()
                     pomocni_cvoric = CvorStabla(potez[0]._izgled)
                     pomocni_cvoric._roditelj = cvor_stabla
-                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) == 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez[0], rendomvremekojeminetreba
                         proteklo_vreme += time() - start
@@ -322,7 +212,7 @@ class Igra(object):
                     start = time()
                     pomocni_cvoric = CvorStabla(potez[0]._izgled)
                     pomocni_cvoric._roditelj = cvor_stabla
-                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) == 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax1(broj_postavljenih + 1, potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         hash_map[tabla[0]._izgled] = nova_vrednost, naj_potez[0], rendomvremekojeminetreba
                         proteklo_vreme += time() - start
@@ -395,7 +285,7 @@ class Igra(object):
                     start = time()
                     pomocni_cvoric = CvorStabla(potez._izgled)
                     pomocni_cvoric._roditelj = cvor_stabla
-                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) == 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         proteklo_vreme += time() - start
                     else:
@@ -449,7 +339,7 @@ class Igra(object):
                     start = time()
                     pomocni_cvoric = CvorStabla(potez._izgled)
                     pomocni_cvoric._roditelj = cvor_stabla
-                    if novi_mlin(pomocni_cvoric, drugi_igrac) > 0:
+                    if novi_mlin(pomocni_cvoric, drugi_igrac) == 0:
                         nova_vrednost, naj_potez, rendomvremekojeminetreba = self.minimax2(potez, dubina - 1, hash_map, proteklo_vreme, cvor, drugi_igrac, igrac, alfa, beta)
                         proteklo_vreme += time() - start
                     else:
@@ -517,6 +407,15 @@ class Igra(object):
             novo_stanje = Tabla(main.nova_lista_faza1(self._trenutno_stanje._izgled, "■", gde), 1, self._na_potezu)
             pomocni_cvoric = CvorStabla(novo_stanje._izgled)
             pomocni_cvoric._roditelj = stablo._trenutni
+            self._trenutno_stanje = novo_stanje
+            for dete in stablo._trenutni._deca:
+                if dete._vrednost == novo_stanje._izgled:
+                    stablo._trenutni = dete
+                    if stablo._trenutni._deca == []:
+                        potezi = self._trenutno_stanje.validni_potezi_faza1(self._na_potezu, "broj")
+                        for stanje in potezi:
+                            stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
+                    break
             if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
                 potezi = self._trenutno_stanje.validno_uklanjanje_piona("■", 1,"potezi_koordinate")
                 print("Mogući potezi su: ")
