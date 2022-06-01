@@ -15,7 +15,7 @@ def heuristika(cvor, faza, boja, gde=0):
         trojke = broj_trojki(cvor, boja)-broj_trojki(cvor, boja2)
         mobilnost = mobilnost_piona(cvor, boja) - mobilnost_piona(cvor, boja2)
         # vrednost_pozicije = pozicija(gde)
-        stanje_table = blokirane*20 + pioni*5 + mobilnost*10 - broj_mlinova(cvor, boja2)*3 + dvojke*25# +novi_mlinovi*20 + broj_mlinova_na_tabli*15 + trojke*30
+        stanje_table = blokirane*20 + pioni*5 + mobilnost*10 - broj_mlinova(cvor, boja2)*3 + dvojke*25 + novi_mlin(cvor, boja)*5# + broj_mlinova_na_tabli*15 + trojke*30
         return stanje_table
     else:
         novi_mlinovi = novi_mlin(cvor, boja) 
@@ -69,6 +69,8 @@ def paralelni_mlinovi(cvor, boja):
 
 def novi_mlin(cvor, boja):     #vraca brojcanu vrednost koja je broj mlinova napravljenih u ovom potezu
     if cvor._vrednost == [["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"], ["x", "x", "x", "x", "x", "x", "x", "x"]]:
+        return 0
+    if cvor._vrednost == []:
         return 0
     k = broj_mlinova(cvor, boja) - broj_mlinova(cvor._roditelj, boja)
     if k > 0:

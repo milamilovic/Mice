@@ -527,9 +527,11 @@ class Igra(object):
                 print()
                 print("Pobedili ste!")
                 print()
+                input("Pritisnite bilo koji taster da biste izasli iz igre: ")
                 exit()
             elif pobednicka_konfiguracija(stablo._trenutni, "▢") == 1000:
                 print()
                 print("Izgubili ste! Racunar je pobedio!")
                 print()
+                input("Pritisnite bilo koji taster da biste izasli iz igre: ")
                 exit()
