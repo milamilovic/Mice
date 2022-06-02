@@ -377,6 +377,7 @@ class Igra(object):
                     potezi = potez.validni_potezi_faza1(self._na_potezu, "broj")
                     for stanje in potezi:
                         stablo._trenutni._dodaj_dete_(CvorStabla(stanje[0]._izgled))
+                print("Kompjuter je sklopio mlin! Izgubili ste piona!")
             self._trenutno_stanje = potez
             for dete in stablo._trenutni._deca:
                 if dete._vrednost == potez._izgled:
@@ -452,6 +453,7 @@ class Igra(object):
                 pomocni_cvoric = CvorStabla(potez._izgled)
                 pomocni_cvoric._roditelj = stablo._trenutni
                 if novi_mlin(pomocni_cvoric, self._na_potezu) > 0:
+                    print("Kompjuter je sklopio mlin! Izgubili ste piona!")
                     potez = self.uklanjanje_piona(potez, 2, self._na_potezu, hesmapa, i)[0]
                     cvor = CvorStabla(potez._izgled)
                     stablo._trenutni._dodaj_dete_(cvor)
